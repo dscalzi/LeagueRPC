@@ -1,0 +1,37 @@
+{
+  "name": "leaguerpc",
+  "version": "0.0.0",
+  "description": "Client to bind rich presence from League of Legends to Discord.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dscalzi/LeagueRPC.git"
+  },
+  "keywords": [
+    "league of legends",
+    "league",
+    "discord",
+    "rich presence",
+    "rpc",
+    "leaguerpc"
+  ],
+  "author": "Daniel Scalzi",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/dscalzi/LeagueRPC/issues"
+  },
+  "homepage": "https://github.com/dscalzi/LeagueRPC#readme",
+  "devDependencies": {
+    "electron": "^1.7.9"
+  },
+  "dependencies": {
+    "discord-rpc": "^3.0.0-beta.8",
+    "jquery": "^3.2.1",
+    "js-yaml": "^3.10.0",
+    "request": "^2.83.0",
+    "teemojs": "^1.1.0"
+  }
+}
