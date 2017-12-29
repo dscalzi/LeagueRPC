@@ -1,7 +1,19 @@
+/*******************************************************************************
+ *                                                                             *
+ * Fonts                                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
 @font-face {
     font-family: 'Cairo SemiBold';
     src: url('../fonts/Cairo-SemiBold.ttf');
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Element Styles                                                              *
+ *                                                                             *
+ ******************************************************************************/
 
 /* Reset body, html, and div presets. */
 body, html, div {
@@ -14,40 +26,33 @@ p {
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
 }
+
 /* Remove button outline. */
 button:focus {
     outline: 0px;
 }
 
+/* Set default span styles. */
+span {
+    font-family: 'Cairo SemiBold';
+    color: #fff;
+}
+
+/* Set the default background image. */
 body {
-    background: url('../images/Diana_11.jpg') no-repeat center center fixed;
+    background: url('../images/default.jpg') no-repeat center center fixed;
+    background-color: #5d5d74;
     background-size: cover;
+    transition: background 0.25s linear;
 }
 
-.frameButton {
-    background: none;
-    border: none;
-    height: 30px;
-    width: 47px;
-    cursor: pointer;
-}
+/*******************************************************************************
+ *                                                                             *
+ * Frame Styles                                                                *
+ *                                                                             *
+ ******************************************************************************/
 
-.frameButton:hover {
-    background: rgba(189, 189, 189, 0.43);
-}
-
-.frameButton:active {
-    background: rgba(156, 156, 156, 0.43);
-}
-
-#closeButton:hover {
-    background: rgba(255, 53, 53, 0.61) !important;
-}
-
-#closeButton:active {
-    background: rgba(235, 0, 0, 0.61) !important;
-}
-
+/* Frame Bar */
 #frameBar {
     display: flex;
     justify-content: space-between;
@@ -56,34 +61,164 @@ body {
     -webkit-user-select: none;
 }
 
-#frameButtonDoc {
-    -webkit-app-region: no-drag !important;
-}
-
-#frameButtonDoc > .frameButton:not(:first-child) {
-    margin-left: -4px;
-}
-
+/* Frame logo */
 #frameTextDoc {
     width: 100px;
     display: flex;
     justify-content: center;
 }
-
 #frameText {
     color: #ffffff;
     font-family: 'Cairo SemiBold';
 }
 
-#mainContent {
-    position: relative;
-    height: calc(100% - 30px);
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-    align-items: center; 
+/* Frame button doc */
+#frameButtonDoc {
+    -webkit-app-region: no-drag !important;
+}
+#frameButtonDoc > .frameButton:not(:first-child) {
+    margin-left: -4px;
 }
 
+/* Set frame button styles */
+.frameButton {
+    background: none;
+    border: none;
+    height: 30px;
+    width: 47px;
+    cursor: pointer;
+}
+.frameButton:hover {
+    background: rgba(189, 189, 189, 0.43);
+}
+.frameButton:active {
+    background: rgba(156, 156, 156, 0.43);
+}
+
+/* Close button is red. */
+#closeButton:hover {
+    background: rgba(255, 53, 53, 0.61) !important;
+}
+#closeButton:active {
+    background: rgba(235, 0, 0, 0.61) !important;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * App Content Container                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+#appContent {
+    position: relative;
+    height: calc(100% - 30px);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    -webkit-user-select: none;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Loading View Styles                                                         *
+ *                                                                             *
+ ******************************************************************************/
+
+/* Main load view container. */
+#loadContent {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to top, rgba(101, 70, 0, 0.35), rgba(0, 0, 0, 0.35));
+}
+
+/* Load content container. */
+#loadDoc {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: -10%;
+}
+
+/* Spinner Object */
+.spinner {
+    width: 75px;
+    height: 75px;
+    background-color: #fff;
+    border-radius: 100%;  
+    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+    animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+@keyframes sk-scaleout {
+    0% { 
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    60% { 
+        opacity: .5
+    }
+    100% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+        opacity: 0;
+    }
+}
+
+/* Header-like text */
+#loadText {
+    font-size: 30px;
+    text-align: center;
+}
+
+/* Supplemental load details. */
+#loadDetails {
+    color: #ccc;
+    font-size: 15px;
+    text-align: center;
+}
+
+/* Retry button styles. */
+#retryLoad {
+    font-family: 'Cairo SemiBold';
+    color: #fff;
+    font-size: 75px;
+    background: none;
+    border: none;
+    line-height: 75px;
+    height: 75px;
+    width: 75px;
+    cursor: pointer;
+    transition: .25s;
+}
+#retryLoad:hover {
+    text-shadow: 0px 0px 10px #fff;
+}
+#retryLoad:active {
+    text-shadow: 0px 0px 10px #fff;
+    color: #ccc;
+}
+#retryLoad[disabled] {
+    pointer-events: none;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Main View Styles                                                            *
+ *                                                                             *
+ ******************************************************************************/
+
+/* Main view container. */
+#mainContent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+/* Summoner info container. */
 #summonerDoc {
     display: flex;
     position: relative;
@@ -101,6 +236,7 @@ body {
     border-image-slice: 1;
 }
 
+/* Right half of Summoner Doc. */
 #rightContent {
     display: flex;
     flex-direction: column;
@@ -110,30 +246,82 @@ body {
 }
 
 #rightContent span {
-    font-family: 'Cairo SemiBold';
     line-height: 30px;
 }
 
-#summonerName {
-    font-size: 35px;
-    color: #ffffff;
-}
-
-#refreshCounter {
-    color: #9c9c9c;
-}
-
+/* Summoner doc top side. */
 #sdTop {
     display: flex;
     flex-direction: column;
 }
 
+#summonerName {
+    font-size: 35px;
+}
+
+#statusDoc {
+    display: flex;
+    align-items: center;
+}
+
+/* Divider styles. */
+.divider {
+    height: 20px;
+    width: 1.9px;
+    background: rgba(255, 255, 255, 0.5);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Button doc at the bottom of the summoner doc. */
 #summonerButtonDoc {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 }
 
+/* Summoner button doc left side. */
+#sbdLeft {
+    display: flex;
+    align-items: flex-end;
+}
+
+/* Shared toggle button styles. */
+.toggleButton {
+    font-family: 'Cairo SemiBold';
+    border: none;
+    color: white;
+    width: 115px;
+    font-size: 14px;
+    transition: .25s;
+    cursor: pointer;
+}
+
+/* Enable button styles. */
+#enableButton {
+    background: linear-gradient(to top left, rgba(47, 93, 39, 0.75), rgba(40, 160, 0, 0.69));
+    box-shadow: inset 0px 9px 12px 0px rgba(153, 243, 95, 0.23);
+}
+#enableButton:hover {
+    box-shadow: inset 0px 9px 40px 0px rgba(153, 243, 95, 0.23);
+}
+#enableButton:active {
+    box-shadow: inset 0px 9px 40px 0px rgba(0, 0, 0, 0.23);
+}
+
+/* Disable button styles. */
+#disableButton {
+    background: linear-gradient(to top left, rgba(93, 39, 39, 0.75), rgba(160, 0, 0, 0.69));
+    box-shadow: inset 0px 9px 12px 0px rgba(243, 95, 95, 0.23);
+}
+#disableButton:hover {
+    box-shadow: inset 0px 9px 40px 0px rgba(243, 95, 95, 0.23);
+}
+#disableButton:active {
+    box-shadow: inset 0px 9px 40px 0px rgba(0, 0, 0, 0.23);
+}
+
+/* Settings button styles. */
 #settingsButton {
     background: none;
     border: none;
@@ -141,40 +329,12 @@ body {
     cursor: pointer;
     fill: #ffffff;
 }
-
 #settingsButton:hover {
     fill: #e0e0e0;
 }
-
 #settingsButton:active {
     fill: #c0c0c0;
 }
-
 #settingsSVG {
     transition:.25s
-}
-
-#toggleButton {
-    font-family: 'Cairo SemiBold';
-    background: rgb(3, 119, 3);
-    border: none;
-    color: white;
-    box-shadow: inset 0 -2px #104e05;
-    width: 95px;
-    font-size: 14px;
-    transition: .25s;
-    cursor: pointer;
-}
-
-#toggleButton:hover {
-    background: rgb(3, 139, 3);
-}
-
-#toggleButton:active {
-    background: rgb(2, 99, 2);
-}
-
-#sbdLeft {
-    display: flex;
-    align-items: flex-end;
 }

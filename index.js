@@ -12,7 +12,10 @@ function createWindow() {
         width: 980,
         height: 552,
         //icon: getPlatformIcon('WesterosSealSquare'),
-        frame: false
+        frame: false,
+        webPreferences: {
+            preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js')
+        }
     })
 
     win.loadURL(url.format({

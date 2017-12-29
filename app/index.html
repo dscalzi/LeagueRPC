@@ -3,6 +3,7 @@
     <meta charset="utf-8" />
     <link type="text/css" rel="stylesheet" href="./assets/css/core.css">
     <script src="./assets/js/uicore.js"></script>
+    <script src="./assets/js/actionbinder.js"></script>
     <title>LeagueRPC</title>
 </head>
 <body>
@@ -23,25 +24,44 @@
             </button>
         </div>
     </div>
-    <div id="mainContent">
-        <div id="summonerDoc">
-            <img id="summonerIcon" src="./assets/images/3237.png"/>
-            <div id="rightContent">
-                <div id="sdTop">
-                    <span id="summonerName">Dominus Aventius</span>
-                    <span id="refreshCounter">Refreshing in 25s..</span>
-                </div>
-                <div id="sdBottom">
-                    <div id="summonerButtonDoc">
-                        <div id="sbdLeft">
-                            <button id="toggleButton">Enable</button>
-                            <button id="refreshClientButton">Refresh</button>
+    <div id="appContent">
+        <div id="loadContent">
+            <div id="loadDoc">
+                <div id="loadSpinner" class="spinner"></div>
+                <button id="retryLoad" disabled="true" style="display: none;">&#8635;</button>
+                <span id="loadText">App Starting</span>
+                <span id="loadDetails">Preparing megathrusters..</span>
+            </div>
+        </div>
+        <div id="mainContent" style="display: none;">
+            <div id="summonerDoc">
+                <img id="summonerIcon" src="./assets/images/3237.png"/>
+                <div id="rightContent">
+                    <div id="sdTop">
+                        <span id="summonerName">Dominus Aventius</span>
+                        <div id="statusDoc">
+                            <span id="statusText">Status:&nbsp;</span>
+                            <span id="statusValue">Disabled</span>
+                            <div class="divider"></div>
+                            <span id="refreshCounter">Click below to enable!</span>
                         </div>
-                        <button id="settingsButton">
-                            <svg id="settingsSVG" name="Settings" viewBox="35.34 34.3575 70.68 68.71500" width="20px" height="20px">
-                                <path d="M70.44,75a6.19,6.19,0,1,1,5.84-6.18A6,6,0,0,1,70.44,75M91.67,63.71h-5A18.4,18.4,0,0,0,85.19,60l3.48-3.68a3.93,3.93,0,0,0,0-5.32l-1.4-1.48a3.43,3.43,0,0,0-5,0l-3.48,3.68A16.34,16.34,0,0,0,75,51.59V46.38a3.68,3.68,0,0,0-3.56-3.76h-2a3.68,3.68,0,0,0-3.56,3.76v5.21a16.23,16.23,0,0,0-3.77,1.64l-3.48-3.68a3.43,3.43,0,0,0-5,0L52.21,51a3.93,3.93,0,0,0,0,5.32L55.69,60a18.21,18.21,0,0,0-1.48,3.67h-5a3.67,3.67,0,0,0-3.56,3.76v2.1a3.68,3.68,0,0,0,3.56,3.76h4.84a18.46,18.46,0,0,0,1.64,4.3l-3.48,3.68a3.93,3.93,0,0,0,0,5.32l1.4,1.48a3.43,3.43,0,0,0,5,0l3.48-3.68a16.36,16.36,0,0,0,3.77,1.64v5.21a3.67,3.67,0,0,0,3.56,3.76h2A3.67,3.67,0,0,0,75,91.29V86.08a16.48,16.48,0,0,0,3.77-1.64l3.48,3.68a3.43,3.43,0,0,0,5,0l1.4-1.48a3.93,3.93,0,0,0,0-5.32l-3.48-3.68a18.45,18.45,0,0,0,1.63-4.3h4.85a3.68,3.68,0,0,0,3.56-3.76v-2.1a3.67,3.67,0,0,0-3.56-3.76"/>
-                            </svg>
-                        </button>
+                    </div>
+                    <div id="sdBottom">
+                        <div id="summonerButtonDoc">
+                            <div id="sbdLeft">
+                                <button class="toggleButton" id="enableButton">Enable</button>
+                                <button class="toggleButton" id="disableButton" style="display: none;">Disable</button>
+                                <!--<svg id="Capa_1" x="0px" y="0px" viewBox="0 0 330 330" xml:space="preserve" width="40px" height="26px">
+                                    <path d="M245.608,84.392c-5.856-5.857-15.355-5.858-21.213-0.001c-5.857,5.858-5.858,15.355,0,21.213L268.789,150H85.002   c-8.284,0-15,6.716-15,15s6.716,15,15,15h183.785l-44.392,44.392c-5.858,5.858-5.858,15.355,0,21.213   c2.929,2.929,6.768,4.393,10.607,4.393c3.839,0,7.678-1.464,10.606-4.393l69.998-69.998c5.858-5.857,5.858-15.355,0-21.213   L245.608,84.392z" fill="#FFFFFF"/>
+                                    <path d="M155,330c8.284,0,15-6.716,15-15s-6.716-15-15-15H40V30h115c8.284,0,15-6.716,15-15s-6.716-15-15-15H25   c-8.284,0-15,6.716-15,15v300c0,8.284,6.716,15,15,15H155z" fill="#FFFFFF"/>
+                                </svg>-->
+                            </div>
+                            <button id="settingsButton">
+                                <svg id="settingsSVG" name="Settings" viewBox="35.34 34.3575 70.68 68.71500" width="20px" height="20px">
+                                    <path d="M70.44,75a6.19,6.19,0,1,1,5.84-6.18A6,6,0,0,1,70.44,75M91.67,63.71h-5A18.4,18.4,0,0,0,85.19,60l3.48-3.68a3.93,3.93,0,0,0,0-5.32l-1.4-1.48a3.43,3.43,0,0,0-5,0l-3.48,3.68A16.34,16.34,0,0,0,75,51.59V46.38a3.68,3.68,0,0,0-3.56-3.76h-2a3.68,3.68,0,0,0-3.56,3.76v5.21a16.23,16.23,0,0,0-3.77,1.64l-3.48-3.68a3.43,3.43,0,0,0-5,0L52.21,51a3.93,3.93,0,0,0,0,5.32L55.69,60a18.21,18.21,0,0,0-1.48,3.67h-5a3.67,3.67,0,0,0-3.56,3.76v2.1a3.68,3.68,0,0,0,3.56,3.76h4.84a18.46,18.46,0,0,0,1.64,4.3l-3.48,3.68a3.93,3.93,0,0,0,0,5.32l1.4,1.48a3.43,3.43,0,0,0,5,0l3.48-3.68a16.36,16.36,0,0,0,3.77,1.64v5.21a3.67,3.67,0,0,0,3.56,3.76h2A3.67,3.67,0,0,0,75,91.29V86.08a16.48,16.48,0,0,0,3.77-1.64l3.48,3.68a3.43,3.43,0,0,0,5,0l1.4-1.48a3.93,3.93,0,0,0,0-5.32l-3.48-3.68a18.45,18.45,0,0,0,1.63-4.3h4.85a3.68,3.68,0,0,0,3.56-3.76v-2.1a3.67,3.67,0,0,0-3.56-3.76"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
