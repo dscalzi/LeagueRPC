@@ -10,7 +10,11 @@ const riot = new RiotWrapper()
  * App Startup and Initialization
  */
 
-let retryBtn, loadSpinner, loadText, loadDetails, loadDoc = null
+// Load elements.
+let retryBtn, loadSpinner, loadText, loadDetails, loadDock
+
+// Settings elements.
+let settingsButton, summonerDock, settingsContent, summonerContent, settingsCancelButton, settingsSaveButton
 
 document.addEventListener('readystatechange', function () {
     if (document.readyState === 'complete'){
@@ -20,7 +24,23 @@ document.addEventListener('readystatechange', function () {
         loadSpinner = document.getElementById('loadSpinner')
         loadText = document.getElementById('loadText')
         loadDetails = document.getElementById('loadDetails')
-        loadDoc = document.getElementById('loadDoc')
+        loadDock = document.getElementById('loadDock')
+
+        // Save the settings elements.
+        settingsButton = document.getElementById('settingsButton')
+        summonerDock = document.getElementById('summonerDock')
+        settingsContent = document.getElementById('settingsContent')
+        summonerContent = document.getElementById('summonerContent')
+        settingsCancelButton = document.getElementById('settingsCancelButton')
+        settingsSaveButton = document.getElementById('settingsSaveButton')
+
+        settingsButton.addEventListener('click', () => {
+            toggleSettingsView(true)
+        })
+
+        settingsCancelButton.addEventListener('click', () => {
+            toggleSettingsView(false)
+        })
 
         // Begin first check after half a second.
         setTimeout(() => {startDiscordCheck()}, 500)
@@ -149,11 +169,11 @@ function validateLeagueTask() {
         validateTracker = 0
         retryEnabled(true)
         loadDetails.innerHTML = 'Log into the League of Legends client, then click the above button to retry.'
-        loadDoc.style.top = ''
+        loadDock.style.top = ''
     } else {
         const t = validateInterval - validateTracker;
         loadDetails.innerHTML = 'Log into the League of Legends client, then click the above button to retry.<br>You may retry in ' + t + ' second' + (t === 1 ? '' : 's') + '..' 
-        loadDoc.style.top = 'calc(-10% + 14px)'
+        loadDock.style.top = 'calc(-10% + 14px)'
         validateTracker += 1
     }
 }
@@ -180,9 +200,15 @@ async function prepareMainUI(){
 
             });
         });
-    }, 3000)
+    }, 2000)
 
 }
+
+/*
+ * Settings View
+ */
+
+
 
 /*
  * Utility Functions
@@ -216,4 +242,26 @@ function clearRetryListeners() {
     const retryBtnClone = retryBtn.cloneNode(true)
     retryBtn.parentNode.replaceChild(retryBtnClone, retryBtn)
     retryBtn = retryBtnClone
+}
+
+/**
+ * Display/hide the settings view.
+ * 
+ * @param {boolean} on - If true, the settings view will be displayed, otherwise it will be hidden.
+ */
+function toggleSettingsView(on) {
+    if(on){
+        summonerDock.style.height = 'calc(80% - 10%)'
+        summonerDock.style.top = '10%'
+        $('#summonerContent').fadeOut(250)
+        setTimeout(() => {
+            $('#settingsContent').fadeIn(250)
+        }, 250)
+    } else {
+        $('#settingsContent').fadeOut(250, () => {
+            $('#summonerContent').fadeIn(250)
+            summonerDock.style.height = '154px'
+            summonerDock.style.top = '20%'
+        })
+    }
 }

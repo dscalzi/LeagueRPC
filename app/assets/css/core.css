@@ -62,7 +62,7 @@ body {
 }
 
 /* Frame logo */
-#frameTextDoc {
+#frameTextDock {
     width: 100px;
     display: flex;
     justify-content: center;
@@ -72,11 +72,11 @@ body {
     font-family: 'Cairo SemiBold';
 }
 
-/* Frame button doc */
-#frameButtonDoc {
+/* Frame button dock */
+#frameButtonDock {
     -webkit-app-region: no-drag !important;
 }
-#frameButtonDoc > .frameButton:not(:first-child) {
+#frameButtonDock > .frameButton:not(:first-child) {
     margin-left: -4px;
 }
 
@@ -134,7 +134,7 @@ body {
 }
 
 /* Load content container. */
-#loadDoc {
+#loadDock {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -218,14 +218,22 @@ body {
     height: 100%;
 }
 
-/* Summoner info container. */
-#summonerDoc {
+/* Info/settings container. */
+#summonerDock {
     display: flex;
+    flex-direction: column;
     position: relative;
-    top: 100px;
+    top: 20%;
     width: 80%;
     background: rgba(0, 0, 0, 0.39);
-    padding: 25px;
+    padding: 25px;  
+    height: 154px;
+    transition: height 0.25s, top 0.25s;
+}
+
+/* Summoner info container. */
+#summonerContent {
+    display: flex;
 }
 
 #summonerIcon {
@@ -236,7 +244,7 @@ body {
     border-image-slice: 1;
 }
 
-/* Right half of Summoner Doc. */
+/* Right half of Summoner Dock. */
 #rightContent {
     display: flex;
     flex-direction: column;
@@ -249,7 +257,7 @@ body {
     line-height: 30px;
 }
 
-/* Summoner doc top side. */
+/* Summoner dock top side. */
 #sdTop {
     display: flex;
     flex-direction: column;
@@ -259,7 +267,7 @@ body {
     font-size: 35px;
 }
 
-#statusDoc {
+#statusDock {
     display: flex;
     align-items: center;
 }
@@ -273,14 +281,14 @@ body {
     margin-right: 10px;
 }
 
-/* Button doc at the bottom of the summoner doc. */
-#summonerButtonDoc {
+/* Button dock at the bottom of the summoner dock. */
+#summonerButtonDock {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 }
 
-/* Summoner button doc left side. */
+/* Summoner button dock left side. */
 #sbdLeft {
     display: flex;
     align-items: flex-end;
@@ -337,4 +345,174 @@ body {
 }
 #settingsSVG {
     transition:.25s
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Settings Styles                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
+/* Main settings view container. */
+#settingsContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px 25px;
+    height: 100%;
+}
+
+/* Settings view header text. */
+#settingsHeader {
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+/* Div which contains each settings field. */
+#settingsManagement {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: calc(100% + 5px);
+    width: 100%;
+}
+
+/* Add a divider between each settings field. */
+#settingsManagement > .settingsField:not(:first-child) {
+    border-top: 1px solid rgba(255, 255, 255, 0.50);
+}
+
+/* Settings management scrollbar styles. */
+#settingsManagement::-webkit-scrollbar {
+    width: 5px;
+}
+#settingsManagement::-webkit-scrollbar-track {
+    display: none;
+}
+#settingsManagement::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgb(255, 255, 255) 
+}
+
+/* Settings field styles. */
+.settingsField {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 75px;
+    background: rgba(0, 0, 0, 0.39);
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+/* Left side of a settings field. */
+.settingsFieldLeft {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Settings field title. */
+.settingTitle {
+    font-size: 15px;
+}
+
+/* Settings field description. */
+.settingDesc {
+    font-size: 12px;
+    color: #ccc;
+}
+
+/* Button dock at the bottom of the settings view. */
+#settingsButtonDock {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+/* Shared settings button styles. */
+.settingsButton {
+    font-family: 'Cairo SemiBold';
+    border: none;
+    color: white;
+    width: 75px;
+    font-size: 14px;
+    height: 27px;
+    transition: .25s;
+    cursor: pointer;
+}
+
+/* Settings save button styles. */
+#settingsSaveButton {
+    margin-left: 10px;
+    background: linear-gradient(to top left, rgba(39, 71, 93, 0.75), rgba(0, 94, 160, 0.69));
+    box-shadow: inset 0px 9px 12px 0px rgba(95, 154, 243, 0.23)
+}
+#settingsSaveButton:hover {
+    box-shadow: inset 0px 9px 40px 0px rgba(95, 154, 243, 0.23)
+}
+#settingsSaveButton:active {
+    box-shadow: inset 0px 9px 40px 0px rgba(0, 0, 0, 0.23);
+}
+
+/* Settings cancel button styles. */
+#settingsCancelButton {
+    background: linear-gradient(to top left, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.69));
+    box-shadow: inset 0px 9px 12px 0px rgba(255, 255, 255, 0.23)
+}
+#settingsCancelButton:hover {
+    box-shadow: inset 0px 9px 40px 0px rgba(255, 255, 255, 0.23);
+}
+#settingsCancelButton:active {
+    box-shadow: inset 0px 9px 40px 0px rgba(0, 0, 0, 0.23);
+}
+
+/* Toggle Switch. */
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 21px;
+}
+  
+/* Hide default HTML checkbox. */
+.switch input {
+    display:none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 15px;
+    width: 15px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+  
+input:checked + .slider {
+    background-color: rgb(32, 91, 143);
+}
+  
+input:focus + .slider {
+    box-shadow: 0 0 1px rgb(32, 91, 143);
+}
+  
+input:checked + .slider:before {
+    transform: translateX(15px);
 }

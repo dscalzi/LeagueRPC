@@ -9,10 +9,10 @@
 <body>
     <div id="app">
     <div id="frameBar">
-        <div id="frameTextDoc">
+        <div id="frameTextDock">
             <span id="frameText">LeagueRPC</span>
         </div>
-        <div id="frameButtonDoc">
+        <div id="frameButtonDock">
             <button class="frameButton" id="minimizeButton">
                 <svg name="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12"><rect stroke="#ffffff" fill="#ffffff" width="10" height="1" x="1" y="6"></rect></svg>
             </button>
@@ -26,7 +26,7 @@
     </div>
     <div id="appContent">
         <div id="loadContent">
-            <div id="loadDoc">
+            <div id="loadDock">
                 <div id="loadSpinner" class="spinner"></div>
                 <button id="retryLoad" disabled="true" style="display: none;">&#8635;</button>
                 <span id="loadText">App Starting</span>
@@ -34,12 +34,13 @@
             </div>
         </div>
         <div id="mainContent" style="display: none;">
-            <div id="summonerDoc">
+            <div id="summonerDock">
+                <div id="summonerContent">
                 <img id="summonerIcon" src="./assets/images/3237.png"/>
                 <div id="rightContent">
                     <div id="sdTop">
                         <span id="summonerName">Dominus Aventius</span>
-                        <div id="statusDoc">
+                        <div id="statusDock">
                             <span id="statusText">Status:&nbsp;</span>
                             <span id="statusValue">Disabled</span>
                             <div class="divider"></div>
@@ -47,7 +48,7 @@
                         </div>
                     </div>
                     <div id="sdBottom">
-                        <div id="summonerButtonDoc">
+                        <div id="summonerButtonDock">
                             <div id="sbdLeft">
                                 <button class="toggleButton" id="enableButton">Enable</button>
                                 <button class="toggleButton" id="disableButton" style="display: none;">Disable</button>
@@ -62,6 +63,53 @@
                                 </svg>
                             </button>
                         </div>
+                    </div>
+                </div>
+                </div>
+                <div id="settingsContent" style="display: none;">
+                    <span id="settingsHeader">Settings</span>
+                    <div id="settingsManagement">
+                        <div class="settingsField">
+                            <div class="settingsFieldLeft">
+                                <span class="settingTitle">Refresh Rate</span>
+                                <span class="settingDesc">The refresh rate for...</span>
+                            </div>
+                            <input type="text">
+                        </div>
+                        <div class="settingsField">
+                            <div class="settingsFieldLeft">
+                                <span class="settingTitle">Close Behavior</span>
+                                <span class="settingDesc">Keep the app active once the window is closed.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="settingsField">
+                            <div class="settingsFieldLeft">
+                                <span class="settingTitle">Close Behavior</span>
+                                <span class="settingDesc">Keep the app active once the window is closed.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="settingsField">
+                            <div class="settingsFieldLeft">
+                                <span class="settingTitle">Close Behavior</span>
+                                <span class="settingDesc">Keep the app active once the window is closed.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="settingsButtonDock">
+                        <button id="settingsCancelButton" class="settingsButton">Cancel</button>
+                        <button id="settingsSaveButton" class="settingsButton">Save</button>
                     </div>
                 </div>
             </div>

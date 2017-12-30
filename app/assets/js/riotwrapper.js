@@ -108,13 +108,12 @@ class RiotWrapper {
         if(this.champData == null || !cached){
             // Rate limits too strong
             // this.champData = await api.get(this.savedAccount.region, 'lolStaticData.getChampionById', champion, {tags: 'skins'})
-            console.log(champCache)
             const x = JSON.parse(fs.readFileSync(champCache, 'utf8'))
             this.champData = x.data[champion]
             this.champData.ddragonVersion = x.version
         }
         const sArr = this.champData.skins
-        const rand = Math.floor(Math.random() * 4)
+        const rand = Math.floor(Math.random() * sArr.length)
         return 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + this.champData.key + '_' + sArr[rand].num + '.jpg'
     }
 
