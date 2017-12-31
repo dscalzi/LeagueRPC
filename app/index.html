@@ -71,15 +71,28 @@
                     <div id="settingsManagement">
                         <div class="settingsField">
                             <div class="settingsFieldLeft">
-                                <span class="settingTitle">Refresh Rate</span>
-                                <span class="settingDesc">The refresh rate for...</span>
+                                <span class="settingTitle">Detection Refresh Rate</span>
+                                <span class="settingDesc">How often the app should check for the presence of a game. Must be greater than 15 seconds.</span>
                             </div>
-                            <input type="text">
+                            <div class="settingsFieldRight">
+                                <span id="detectionRefreshRate" class="settingsNumberField" contenteditable="true">15</span>
+                                <span class="settingsFieldLabel">seconds</span>
+                            </div>
                         </div>
                         <div class="settingsField">
                             <div class="settingsFieldLeft">
-                                <span class="settingTitle">Close Behavior</span>
-                                <span class="settingDesc">Keep the app active once the window is closed.</span>
+                                <span class="settingTitle">Game Refresh Rate</span>
+                                <span class="settingDesc">How often the app should pull updates about the current game. Must be greater than 20 seconds.</span>
+                            </div>
+                            <div class="settingsFieldRight">
+                                <span id="gameRefreshRate" class="settingsNumberField" contenteditable="true">30</span>
+                                <span class="settingsFieldLabel">seconds</span>
+                            </div>
+                        </div>
+                        <div class="settingsField">
+                            <div class="settingsFieldLeft">
+                                <span class="settingTitle">Run in the Background</span>
+                                <span class="settingDesc">Have the app continue to run in the background even when the window is closed.</span>
                             </div>
                             <label class="switch">
                                 <input type="checkbox">
@@ -88,18 +101,8 @@
                         </div>
                         <div class="settingsField">
                             <div class="settingsFieldLeft">
-                                <span class="settingTitle">Close Behavior</span>
-                                <span class="settingDesc">Keep the app active once the window is closed.</span>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="settingsField">
-                            <div class="settingsFieldLeft">
-                                <span class="settingTitle">Close Behavior</span>
-                                <span class="settingDesc">Keep the app active once the window is closed.</span>
+                                <span class="settingTitle">Start App on System Startup</span>
+                                <span class="settingDesc">Have LeagueRPC automatically open when the system starts.</span>
                             </div>
                             <label class="switch">
                                 <input type="checkbox">

@@ -5,7 +5,7 @@ const request = require('request')
 const TeemoJS = require('teemojs');
 const yaml = require('js-yaml')
 
-const api = TeemoJS('RGAPI-d4ed6776-83d3-4a0d-8ce5-af35485ee9a0');
+const api = TeemoJS('RGAPI-6abbc074-973e-465f-8a2a-243fc29dd659');
 const sysRoot = (os.platform() == "win32") ? process.cwd().split(path.sep)[0] : "/"
 const riotConfig = path.join(sysRoot, 'Riot Games', 'League of Legends', 'Config', 'LeagueClientSettings.yaml')
 const champCache = path.join(__dirname, '..', 'apicache', 'championdata.json')

@@ -372,7 +372,7 @@ body {
 #settingsManagement {
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     width: calc(100% + 5px);
     width: 100%;
@@ -422,6 +422,33 @@ body {
 .settingDesc {
     font-size: 12px;
     color: #ccc;
+}
+
+.settingsFieldRight {
+    display: flex;
+    align-items: center;
+}
+
+.settingsNumberField {
+    width: 35px;
+    font-size: 15px;
+    line-height: 21px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    background: rgba(0, 94, 160, 0.69);
+}
+
+.settingsNumberField:hover,
+.settingsNumberField:focus,
+.settingsNumberField:active {
+    outline: none;
+}
+
+.settingsFieldLabel {
+    margin-left: 5px;
+    font-size: 13px;
+    line-height: 11px;
 }
 
 /* Button dock at the bottom of the settings view. */
