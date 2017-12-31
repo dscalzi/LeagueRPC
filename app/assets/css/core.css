@@ -374,7 +374,7 @@ body {
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
-    width: calc(100% + 5px);
+    /*width: calc(100% + 5px);*/
     width: 100%;
 }
 
@@ -424,11 +424,13 @@ body {
     color: #ccc;
 }
 
+/* Right side of a settings field. */
 .settingsFieldRight {
     display: flex;
     align-items: center;
 }
 
+/* Field for number inputs. */
 .settingsNumberField {
     width: 35px;
     font-size: 15px;
@@ -438,13 +440,13 @@ body {
     text-align: center;
     background: rgba(0, 94, 160, 0.69);
 }
-
 .settingsNumberField:hover,
 .settingsNumberField:focus,
 .settingsNumberField:active {
     outline: none;
 }
 
+/* Standard label. */
 .settingsFieldLabel {
     margin-left: 5px;
     font-size: 13px;
