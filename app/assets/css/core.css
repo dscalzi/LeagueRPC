@@ -405,6 +405,11 @@ body {
     background: rgba(0, 0, 0, 0.39);
     box-sizing: border-box;
     padding: 15px;
+    transition: 0.25s;
+}
+
+.invalidSetting {
+    background: rgba(255, 17, 17, 0.34) !important;
 }
 
 /* Left side of a settings field. */
@@ -483,6 +488,12 @@ body {
 }
 #settingsSaveButton:active {
     box-shadow: inset 0px 9px 40px 0px rgba(0, 0, 0, 0.23);
+}
+#settingsSaveButton:disabled {
+    pointer-events: none;
+    color: #676767;
+    background: linear-gradient(to top left, rgba(17, 31, 41, 0.75), rgba(0, 36, 62, 0.69));
+    box-shadow: inset 0px 9px 12px 0px rgba(42, 70, 111, 0.23);
 }
 
 /* Settings cancel button styles. */

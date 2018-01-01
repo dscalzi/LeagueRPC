@@ -1,5 +1,6 @@
 const path = require('path')
 const CacheManager = require(path.join(__dirname, 'assets', 'js', 'cachemanager.js'))
+const ConfigManager = require(path.join(__dirname, 'assets', 'js', 'configmanager.js'))
 const ProcessManager = require(path.join(__dirname, 'assets', 'js', 'processmanager.js'))
 const RiotWrapper = require(path.join(__dirname, 'assets', 'js', 'riotwrapper.js'))
 
@@ -14,7 +15,10 @@ const riot = new RiotWrapper()
 let retryBtn, loadSpinner, loadText, loadDetails, loadDock
 
 // Settings elements.
-let settingsButton, summonerDock, settingsContent, summonerContent, settingsCancelButton, settingsSaveButton
+let settingsButton, summonerDock, settingsCancelButton, settingsSaveButton
+
+// Setting Fields.
+let detectionRefreshRate, gameRefreshRate, runInBackground, autoStart
 
 document.addEventListener('readystatechange', function () {
     if (document.readyState === 'complete'){
@@ -29,13 +33,52 @@ document.addEventListener('readystatechange', function () {
         // Save the settings elements.
         settingsButton = document.getElementById('settingsButton')
         summonerDock = document.getElementById('summonerDock')
-        settingsContent = document.getElementById('settingsContent')
-        summonerContent = document.getElementById('summonerContent')
         settingsCancelButton = document.getElementById('settingsCancelButton')
         settingsSaveButton = document.getElementById('settingsSaveButton')
 
+        // Save the setting fields.
+        detectionRefreshRate = document.getElementById('detectionRefreshRate')
+        gameRefreshRate = document.getElementById('gameRefreshRate')
+        runInBackground = document.getElementById('runInBackground')
+        autoStart = document.getElementById('autoStart')
+
+        detectionRefreshRate.innerHTML = ConfigManager.getDetectionRefreshRate()
+        validateSettingsNumberField(detectionRefreshRate)
+        gameRefreshRate.innerHTML = ConfigManager.getGameRefreshRate()
+        validateSettingsNumberField(gameRefreshRate)
+        runInBackground.checked = ConfigManager.getRunInBackground()
+        autoStart.checked = ConfigManager.getAutoStart()
+
+        // Bind Settings Number Field behavior.
+        $('.settingsNumberField').keypress((e) => {
+            const ex = [8, 38, 40]
+            if(isNaN(String.fromCharCode(e.which)) && ex.indexOf(e.which) === -1) {
+                e.preventDefault()
+            }
+        })
+        $('.settingsNumberField').keydown((e) => {
+            const ex = [38, 40]
+            if(ex.indexOf(e.which) > -1){
+                const val = parseInt(e.currentTarget.innerHTML)
+                if(e.which === 38){
+                    e.currentTarget.innerHTML = val + 1
+                }
+                if(e.which === 40){
+                    e.currentTarget.innerHTML = val - 1
+                }
+                e.preventDefault()
+            }
+        })
+        $('.settingsNumberField').keyup((e) => {
+            validateSettingsNumberField(e.currentTarget)
+        })
+
         settingsButton.addEventListener('click', () => {
             toggleSettingsView(true)
+        })
+
+        settingsSaveButton.addEventListener('click', () => {
+            saveSettings()
         })
 
         settingsCancelButton.addEventListener('click', () => {
@@ -234,6 +277,15 @@ function retryEnabled(v) {
 }
 
 /**
+ * Enable/Disable the settings save button.
+ * 
+ * @param {boolean} v - If true, the settings save button is clickable, otherwise it isnt. 
+ */
+function settingsSaveEnabled(v) {
+    settingsSaveButton.disabled = !v
+}
+
+/**
  * Clear all listeners from the retry load button.
  * This is done by cloning the button and updating
  * the global pointer.
@@ -264,4 +316,23 @@ function toggleSettingsView(on) {
             summonerDock.style.top = '20%'
         })
     }
+}
+
+function validateSettingsNumberField(currentTarget) {
+    const val = parseInt(currentTarget.innerHTML)
+    if(val > currentTarget.getAttribute('max') || val < currentTarget.getAttribute('min')){
+        settingsSaveEnabled(false)
+        currentTarget.parentElement.parentElement.classList.add('invalidSetting')
+    } else {
+        settingsSaveEnabled(true)
+        currentTarget.parentElement.parentElement.classList.remove('invalidSetting')
+    }
+}
+
+function saveSettings(){
+    ConfigManager.setDetectionRefreshRate(parseInt(detectionRefreshRate.innerHTML))
+    ConfigManager.setGameRefreshRate(parseInt(gameRefreshRate.innerHTML))
+    ConfigManager.setRunInBackground(runInBackground.checked)
+    ConfigManager.setAutoStart(autoStart.checked)
+    ConfigManager.save()
 }

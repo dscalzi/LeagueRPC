@@ -8,7 +8,8 @@ function isRunning(win, mac, linux){
         const cmd = plat == 'win32' ? 'tasklist' : (plat == 'darwin' ? 'ps -ax | grep ' + mac : (plat == 'linux' ? 'ps -A' : ''))
         const proc = plat == 'win32' ? win : (plat == 'darwin' ? mac : (plat == 'linux' ? linux : ''))
         if(cmd === '' || proc === ''){
-            return false
+            //Resolve or reject? hmmm
+            resolve(false)
         }
         exec(cmd, function(err, stdout, stderr) {
             resolve(stdout.toLowerCase().indexOf(proc.toLowerCase()) > -1)

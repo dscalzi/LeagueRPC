@@ -36,7 +36,7 @@
         <div id="mainContent" style="display: none;">
             <div id="summonerDock">
                 <div id="summonerContent">
-                <img id="summonerIcon" src="./assets/images/3237.png"/>
+                <img id="summonerIcon" src="./assets/images/defaultIcon.png"/>
                 <div id="rightContent">
                     <div id="sdTop">
                         <span id="summonerName">Dominus Aventius</span>
@@ -72,20 +72,20 @@
                         <div class="settingsField">
                             <div class="settingsFieldLeft">
                                 <span class="settingTitle">Detection Refresh Rate</span>
-                                <span class="settingDesc">How often the app should check for the presence of a game. Must be greater than 15 seconds.</span>
+                                <span class="settingDesc">How often the app should check for the presence of a game. Must be between 15 and 3600 seconds.</span>
                             </div>
                             <div class="settingsFieldRight">
-                                <span id="detectionRefreshRate" class="settingsNumberField" contenteditable="true">15</span>
+                                <span id="detectionRefreshRate" class="settingsNumberField" contenteditable="true" min="15" max="3600">15</span>
                                 <span class="settingsFieldLabel">seconds</span>
                             </div>
                         </div>
                         <div class="settingsField">
                             <div class="settingsFieldLeft">
                                 <span class="settingTitle">Game Refresh Rate</span>
-                                <span class="settingDesc">How often the app should pull updates about the current game. Must be greater than 20 seconds.</span>
+                                <span class="settingDesc">How often the app should pull updates about the current game. Must be between 20 and 300 seconds.</span>
                             </div>
                             <div class="settingsFieldRight">
-                                <span id="gameRefreshRate" class="settingsNumberField" contenteditable="true">30</span>
+                                <span id="gameRefreshRate" class="settingsNumberField" contenteditable="true" min="20" max="300">30</span>
                                 <span class="settingsFieldLabel">seconds</span>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                                 <span class="settingDesc">Have the app continue to run in the background even when the window is closed.</span>
                             </div>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input id="runInBackground" type="checkbox">
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -105,7 +105,7 @@
                                 <span class="settingDesc">Have LeagueRPC automatically open when the system starts.</span>
                             </div>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input id="autoStart" type="checkbox">
                                 <span class="slider"></span>
                             </label>
                         </div>

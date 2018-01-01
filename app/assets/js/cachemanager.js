@@ -11,6 +11,11 @@ function ensureDirectoryExists(){
     }
 }
 
+function getDataPath(){
+    return dataPath
+}
+
 module.exports = {
-    ensureDirectoryExists
+    ensureDirectoryExists,
+    getDataPath
 }
