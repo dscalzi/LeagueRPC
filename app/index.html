@@ -9,19 +9,26 @@
 <body>
     <div id="app">
     <div id="frameBar">
-        <div id="frameTextDock">
-            <span id="frameText">LeagueRPC</span>
-        </div>
-        <div id="frameButtonDock">
-            <button class="frameButton" id="minimizeButton">
-                <svg name="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12"><rect stroke="#ffffff" fill="#ffffff" width="10" height="1" x="1" y="6"></rect></svg>
-            </button>
-            <button class="frameButton" id="maximizeButton">
-                <svg name="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12"><rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff" stroke-width="1.4px"></rect></svg>
-            </button>
-            <button class="frameButton" id="closeButton">
-                <svg name="TitleBarClose" width="12" height="12" viewBox="0 0 12 12"><polygon stroke="#ffffff" fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg>
-            </button>
+        <div id="frameResizableTop" class="frameDragPadder"></div>
+        <div id="frameMain">
+            <div class="frameResizableVert frameDragPadder"></div>
+            <div id="frameContent">
+                <div id="frameTextDock">
+                    <span id="frameText">LeagueRPC</span>
+                </div>
+                <div id="frameButtonDock">
+                    <button class="frameButton" id="minimizeButton">
+                        <svg name="TitleBarMinimize" width="12" height="12" viewBox="0 0 12 12"><rect stroke="#ffffff" fill="#ffffff" width="10" height="1" x="1" y="6"></rect></svg>
+                    </button>
+                    <button class="frameButton" id="maximizeButton">
+                        <svg name="TitleBarMaximize" width="12" height="12" viewBox="0 0 12 12"><rect width="9" height="9" x="1.5" y="1.5" fill="none" stroke="#ffffff" stroke-width="1.4px"></rect></svg>
+                    </button>
+                    <button class="frameButton" id="closeButton">
+                        <svg name="TitleBarClose" width="12" height="12" viewBox="0 0 12 12"><polygon stroke="#ffffff" fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="frameResizableVert frameDragPadder"></div>
         </div>
     </div>
     <div id="appContent">
@@ -75,7 +82,7 @@
                                 <span class="settingDesc">How often the app should check for the presence of a game. Must be between 15 and 3600 seconds.</span>
                             </div>
                             <div class="settingsFieldRight">
-                                <span id="detectionRefreshRate" class="settingsNumberField" contenteditable="true" min="15" max="3600">15</span>
+                                <span id="DetectionRefreshRate" class="settingsNumberField sinput" contenteditable="true" min="15" max="3600">-1</span>
                                 <span class="settingsFieldLabel">seconds</span>
                             </div>
                         </div>
@@ -85,7 +92,7 @@
                                 <span class="settingDesc">How often the app should pull updates about the current game. Must be between 20 and 300 seconds.</span>
                             </div>
                             <div class="settingsFieldRight">
-                                <span id="gameRefreshRate" class="settingsNumberField" contenteditable="true" min="20" max="300">30</span>
+                                <span id="GameRefreshRate" class="settingsNumberField sinput" contenteditable="true" min="20" max="300">-1</span>
                                 <span class="settingsFieldLabel">seconds</span>
                             </div>
                         </div>
@@ -95,7 +102,7 @@
                                 <span class="settingDesc">Have the app continue to run in the background even when the window is closed.</span>
                             </div>
                             <label class="switch">
-                                <input id="runInBackground" type="checkbox">
+                                <input id="RunInBackground" class="sinput" type="checkbox">
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -105,14 +112,20 @@
                                 <span class="settingDesc">Have LeagueRPC automatically open when the system starts.</span>
                             </div>
                             <label class="switch">
-                                <input id="autoStart" type="checkbox">
+                                <input id="AutoStart" class="sinput" type="checkbox">
                                 <span class="slider"></span>
                             </label>
                         </div>
                     </div>
-                    <div id="settingsButtonDock">
-                        <button id="settingsCancelButton" class="settingsButton">Cancel</button>
-                        <button id="settingsSaveButton" class="settingsButton">Save</button>
+                    <div id="settingsBottom">
+                        <div id="settingsStatus">
+                            <span>Status:&nbsp;</span>
+                            <span id="settingStatusText">Saved</span>
+                        </div>
+                        <div id="settingsButtonDock">
+                            <button id="settingsCancelButton" class="settingsButton">Cancel</button>
+                            <button id="settingsSaveButton" class="settingsButton" disabled="true">Save</button>
+                        </div>
                     </div>
                 </div>
             </div>

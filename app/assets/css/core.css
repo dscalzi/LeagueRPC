@@ -55,10 +55,32 @@ body {
 /* Frame Bar */
 #frameBar {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     background: rgba(1, 2, 1, 0.5);
-    -webkit-app-region: drag;
     -webkit-user-select: none;
+}
+
+#frameResizableTop {
+    height: 2px;
+    width: 100%;
+    -webkit-app-region: no-drag;
+}
+
+.frameResizableVert {
+    width: 2px;
+    -webkit-app-region: no-drag;
+}
+
+#frameMain {
+    display: flex;
+    height: 28px
+}
+
+#frameContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    -webkit-app-region: drag;
 }
 
 /* Frame logo */
@@ -66,6 +88,9 @@ body {
     width: 100px;
     display: flex;
     justify-content: center;
+    position: relative;
+    top: -2px;
+    left: -2px;
 }
 #frameText {
     color: #ffffff;
@@ -75,6 +100,10 @@ body {
 /* Frame button dock */
 #frameButtonDock {
     -webkit-app-region: no-drag !important;
+    position: relative;
+    top: -2px;
+    right: -2px;
+    height: 30px;
 }
 #frameButtonDock > .frameButton:not(:first-child) {
     margin-left: -4px;
@@ -357,7 +386,6 @@ body {
 #settingsContent {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 5px 25px;
     height: 100%;
 }
@@ -365,7 +393,7 @@ body {
 /* Settings view header text. */
 #settingsHeader {
     font-size: 25px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 /* Div which contains each settings field. */
@@ -458,11 +486,26 @@ body {
     line-height: 11px;
 }
 
+#settingsBottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 10px
+}
+
+#settingsStatus {
+    display: flex;
+}
+
+#settingsStatus > span {
+    color: white;
+    line-height: 10px;
+    font-size: 10px;
+}
+
 /* Button dock at the bottom of the settings view. */
 #settingsButtonDock {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
 }
 
 /* Shared settings button styles. */

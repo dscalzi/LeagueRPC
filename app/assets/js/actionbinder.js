@@ -11,43 +11,40 @@ const riot = new RiotWrapper()
  * App Startup and Initialization
  */
 
-// Load elements.
+// Load View Elements.
 let retryBtn, loadSpinner, loadText, loadDetails, loadDock
 
-// Settings elements.
-let settingsButton, summonerDock, settingsCancelButton, settingsSaveButton
+// Settings View Elements.
+let settingsButton, summonerDock, settingsCancelButton, settingsSaveButton, settingStatusText
 
-// Setting Fields.
-let detectionRefreshRate, gameRefreshRate, runInBackground, autoStart
+const settingsState = {
+    modifiedBy: new Set(),
+    invalid: new Set()
+}
 
 document.addEventListener('readystatechange', function () {
     if (document.readyState === 'complete'){
         
-        // Save the load screen elements.
+        // Reference the Load View Elements.
         retryBtn = document.getElementById('retryLoad')
         loadSpinner = document.getElementById('loadSpinner')
         loadText = document.getElementById('loadText')
         loadDetails = document.getElementById('loadDetails')
         loadDock = document.getElementById('loadDock')
 
-        // Save the settings elements.
+        // Reference the Settings View Elements.
         settingsButton = document.getElementById('settingsButton')
         summonerDock = document.getElementById('summonerDock')
         settingsCancelButton = document.getElementById('settingsCancelButton')
         settingsSaveButton = document.getElementById('settingsSaveButton')
-
-        // Save the setting fields.
-        detectionRefreshRate = document.getElementById('detectionRefreshRate')
-        gameRefreshRate = document.getElementById('gameRefreshRate')
-        runInBackground = document.getElementById('runInBackground')
-        autoStart = document.getElementById('autoStart')
-
-        detectionRefreshRate.innerHTML = ConfigManager.getDetectionRefreshRate()
-        validateSettingsNumberField(detectionRefreshRate)
-        gameRefreshRate.innerHTML = ConfigManager.getGameRefreshRate()
-        validateSettingsNumberField(gameRefreshRate)
-        runInBackground.checked = ConfigManager.getRunInBackground()
-        autoStart.checked = ConfigManager.getAutoStart()
+        settingStatusText = document.getElementById('settingStatusText')
+        
+        // Load each setting input with its saved value.
+        bindSettingInputs()
+        // Bind change listeners to each element.
+        bindSettingsChangeListeners()
+        // Ensure correct state is displayed.
+        changeSettingsState(true)
 
         // Bind Settings Number Field behavior.
         $('.settingsNumberField').keypress((e) => {
@@ -62,15 +59,18 @@ document.addEventListener('readystatechange', function () {
                 const val = parseInt(e.currentTarget.innerHTML)
                 if(e.which === 38){
                     e.currentTarget.innerHTML = val + 1
+                    validateSettingsNumberField(e.currentTarget)
+                    settingsChangeEval(e.target.innerHTML != settingsState[e.target.id], e.currentTarget.id)
                 }
                 if(e.which === 40){
-                    e.currentTarget.innerHTML = val - 1
+                    if(val-1 >= 0){
+                        e.currentTarget.innerHTML = val - 1
+                        validateSettingsNumberField(e.currentTarget)
+                        settingsChangeEval(e.target.innerHTML != settingsState[e.target.id], e.currentTarget.id)
+                    }
                 }
                 e.preventDefault()
             }
-        })
-        $('.settingsNumberField').keyup((e) => {
-            validateSettingsNumberField(e.currentTarget)
         })
 
         settingsButton.addEventListener('click', () => {
@@ -92,8 +92,14 @@ document.addEventListener('readystatechange', function () {
 
 }, false)
 
+/*******************************************************************************
+ *                                                                             *
+ * Loading View Processing                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
 /*
- * Check if Discord is running.
+ *  Check if Discord is running.
  */
 
 const discordInterval = 15
@@ -247,15 +253,154 @@ async function prepareMainUI(){
 
 }
 
-/*
- * Settings View
+/*******************************************************************************
+ *                                                                             *
+ * Settings View Processing                                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+/**
+ * Validate the input in a settings number field.
+ * 
+ * @param {Element} currentTarget - the element in question.
  */
+function validateSettingsNumberField(currentTarget) {
+    const val = parseInt(currentTarget.innerHTML)
+    if(isNaN(val) || val > currentTarget.getAttribute('max') || val < currentTarget.getAttribute('min')){
+        settingsSaveEnabled(false)
+        currentTarget.parentElement.parentElement.classList.add('invalidSetting')
+        settingsState.invalid.add(currentTarget.id)
+    } else {
+        if(currentTarget.parentElement.parentElement.classList.contains('invalidSetting')){
+            currentTarget.parentElement.parentElement.classList.remove('invalidSetting')
+            settingsState.invalid.delete(currentTarget.id)
+            if(settingsState.modifiedBy.size > 0 && settingsState.invalid.size === 0){
+                settingsSaveEnabled(true)
+            }
+        }
+    }
+}
 
-
-
-/*
- * Utility Functions
+/**
+ * Update the state of the settings UI. This involves setting a status
+ * message and enabling/disabling the save button based on the input.
+ * 
+ * @param {boolean} isSaved - if the settings values are already saved. 
  */
+function changeSettingsState(isSaved){
+    if(settingsState.invalid.size > 0){
+        settingStatusText.innerHTML = 'Invalid Values!'
+        settingsSaveEnabled(false)
+    } else {
+        if(isSaved){
+            settingsSaveEnabled(false)
+            settingStatusText.innerHTML = 'Saved'
+        } else {
+            settingsSaveEnabled(true)
+            settingStatusText.innerHTML = 'Not Saved!'
+        }
+    }
+}
+
+/**
+ * Load the currently saved settings values onto the UI.
+ */
+function bindSettingInputs(){
+    const eles = document.getElementsByClassName('sinput')
+    for(let i=0; i<eles.length; i++){
+        const id = eles[i].id
+        const gFn = ConfigManager['get' + id]
+        if(typeof gFn === 'function'){
+            settingsState[id] = gFn()
+            if(eles[i].tagName === 'SPAN'){
+                eles[i].innerHTML = gFn()
+                if(eles[i].classList.contains('settingsNumberField')){
+                    validateSettingsNumberField(eles[i])
+                }
+            } else if(eles[i].tagName === 'INPUT'){
+                if(eles[i].getAttribute('type') === 'checkbox'){
+                    eles[i].checked = gFn()
+                }
+            }
+        } else {
+            console.error('Malformed settings input:', id)
+        }
+    }
+}
+
+/**
+ * Evaluate the actions which should be taken when a settings value
+ * is modified.
+ * 
+ * @param {boolean} wasChanged - if the element was changed.
+ * @param {string} id - the id of the element which was changed.
+ */
+function settingsChangeEval(wasChanged, id){
+    if(wasChanged){
+        settingsState.modifiedBy.add(id)
+        changeSettingsState(settingsState.modifiedBy.size === 0)
+    } else {
+        settingsState.modifiedBy.delete(id)
+        changeSettingsState(settingsState.modifiedBy.size === 0)
+    }
+}
+
+/**
+ * Binds change listeners to each registered settings inputs in order
+ * to monitor changes and update the UI accordingly.
+ */
+function bindSettingsChangeListeners(){
+    const eles = document.getElementsByClassName('sinput')
+    for(let i=0; i<eles.length; i++){
+        const id = eles[i].id
+        if(eles[i].tagName === 'SPAN'){
+            eles[i].addEventListener('input', (e) => {
+                if(e.target.classList.contains('settingsNumberField')){
+                    validateSettingsNumberField(e.currentTarget)
+                }
+                settingsChangeEval(e.target.innerHTML != settingsState[e.target.id], e.target.id)
+            })
+        } else if(eles[i].tagName === 'INPUT'){
+            if(eles[i].getAttribute('type') === 'checkbox'){
+                eles[i].addEventListener('change', (e) => {
+                    settingsChangeEval(e.target.checked !== settingsState[e.target.id], e.target.id)
+                })
+            }
+        }
+    }
+}
+
+/**
+ * Save the settings changes.
+ */
+function saveSettings(){
+    changeSettingsState(true)
+    settingsState.modifiedBy = new Set()
+    settingsState.invalid = new Set()
+    const eles = document.getElementsByClassName('sinput')
+    for(let i=0; i<eles.length; i++){
+        const id = eles[i].id
+        const sFn = ConfigManager['set' + id]
+        if(typeof sFn === 'function'){
+            if(eles[i].tagName === 'SPAN'){
+                sFn(eles[i].innerHTML)
+            } else if(eles[i].tagName === 'INPUT'){
+                if(eles[i].getAttribute('type') === 'checkbox'){
+                    sFn(eles[i].checked)
+                }
+            }
+        } else {
+            console.error('Malformed settings input:', id)
+        }
+    }
+    ConfigManager.save()
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Utility Functions                                                           *
+ *                                                                             *
+ ******************************************************************************/
 
  /**
   * Toggle the loading spinner.
@@ -316,23 +461,4 @@ function toggleSettingsView(on) {
             summonerDock.style.top = '20%'
         })
     }
-}
-
-function validateSettingsNumberField(currentTarget) {
-    const val = parseInt(currentTarget.innerHTML)
-    if(val > currentTarget.getAttribute('max') || val < currentTarget.getAttribute('min')){
-        settingsSaveEnabled(false)
-        currentTarget.parentElement.parentElement.classList.add('invalidSetting')
-    } else {
-        settingsSaveEnabled(true)
-        currentTarget.parentElement.parentElement.classList.remove('invalidSetting')
-    }
-}
-
-function saveSettings(){
-    ConfigManager.setDetectionRefreshRate(parseInt(detectionRefreshRate.innerHTML))
-    ConfigManager.setGameRefreshRate(parseInt(gameRefreshRate.innerHTML))
-    ConfigManager.setRunInBackground(runInBackground.checked)
-    ConfigManager.setAutoStart(autoStart.checked)
-    ConfigManager.save()
 }
