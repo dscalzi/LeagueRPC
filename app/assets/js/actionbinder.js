@@ -15,7 +15,7 @@ const riot = new RiotWrapper()
 let retryBtn, loadSpinner, loadText, loadDetails, loadDock
 
 // Settings View Elements.
-let settingsButton, summonerDock, settingsCancelButton, settingsSaveButton, settingStatusText
+let settingsButton, summonerDock, settingsUndoButton, settingsDoneButton, settingStatusText
 
 const settingsState = {
     modifiedBy: new Set(),
@@ -35,8 +35,8 @@ document.addEventListener('readystatechange', function () {
         // Reference the Settings View Elements.
         settingsButton = document.getElementById('settingsButton')
         summonerDock = document.getElementById('summonerDock')
-        settingsCancelButton = document.getElementById('settingsCancelButton')
-        settingsSaveButton = document.getElementById('settingsSaveButton')
+        settingsUndoButton = document.getElementById('settingsUndoButton')
+        settingsDoneButton = document.getElementById('settingsDoneButton')
         settingStatusText = document.getElementById('settingStatusText')
         
         // Load each setting input with its saved value.
@@ -73,16 +73,28 @@ document.addEventListener('readystatechange', function () {
             }
         })
 
+        // Bind the settings button on the main view.
         settingsButton.addEventListener('click', () => {
             toggleSettingsView(true)
         })
 
-        settingsSaveButton.addEventListener('click', () => {
-            saveSettings()
+        // Bind the done button to save and exit the settings view.
+        settingsDoneButton.addEventListener('click', () => {
+            if(settingsState.modifiedBy.size > 0){
+                console.log('Settings saved.')
+                saveSettings()
+                bindSettingInputs()
+            }
+            toggleSettingsView(false)
         })
 
-        settingsCancelButton.addEventListener('click', () => {
-            toggleSettingsView(false)
+        // Bind the undo button to reset the values to what is already saved.
+        settingsUndoButton.addEventListener('click', () => {
+            bindSettingInputs()
+            settingsDoneEnabled(true)
+            settingsState.invalid = new Set()
+            settingsState.modifiedBy = new Set()
+            changeSettingsState(true)
         })
 
         // Begin first check after half a second.
@@ -266,8 +278,9 @@ async function prepareMainUI(){
  */
 function validateSettingsNumberField(currentTarget) {
     const val = parseInt(currentTarget.innerHTML)
-    if(isNaN(val) || val > currentTarget.getAttribute('max') || val < currentTarget.getAttribute('min')){
-        settingsSaveEnabled(false)
+    const vFn = ConfigManager['validate' + currentTarget.id]
+    if(!vFn(val)){
+        settingsUndoEnabled(false)
         currentTarget.parentElement.parentElement.classList.add('invalidSetting')
         settingsState.invalid.add(currentTarget.id)
     } else {
@@ -275,7 +288,7 @@ function validateSettingsNumberField(currentTarget) {
             currentTarget.parentElement.parentElement.classList.remove('invalidSetting')
             settingsState.invalid.delete(currentTarget.id)
             if(settingsState.modifiedBy.size > 0 && settingsState.invalid.size === 0){
-                settingsSaveEnabled(true)
+                settingsUndoEnabled(true)
             }
         }
     }
@@ -283,21 +296,24 @@ function validateSettingsNumberField(currentTarget) {
 
 /**
  * Update the state of the settings UI. This involves setting a status
- * message and enabling/disabling the save button based on the input.
+ * message and enabling/disabling the undo & done button based on the input.
  * 
  * @param {boolean} isSaved - if the settings values are already saved. 
  */
-function changeSettingsState(isSaved){
+function changeSettingsState(isSaved, wasInvalid = null){
     if(settingsState.invalid.size > 0){
         settingStatusText.innerHTML = 'Invalid Values!'
-        settingsSaveEnabled(false)
+        settingsUndoEnabled(true)
+        settingsDoneEnabled(false)
     } else {
         if(isSaved){
-            settingsSaveEnabled(false)
+            settingsUndoEnabled(false)
+            settingsDoneEnabled(true)
             settingStatusText.innerHTML = 'Saved'
         } else {
-            settingsSaveEnabled(true)
-            settingStatusText.innerHTML = 'Not Saved!'
+            settingsUndoEnabled(true)
+            settingsDoneEnabled(true)
+            settingStatusText.innerHTML = 'Modified'
         }
     }
 }
@@ -307,10 +323,18 @@ function changeSettingsState(isSaved){
  */
 function bindSettingInputs(){
     const eles = document.getElementsByClassName('sinput')
+    let shouldSave = false
     for(let i=0; i<eles.length; i++){
         const id = eles[i].id
-        const gFn = ConfigManager['get' + id]
+        const gFn = ConfigManager['get' + id], vFn = ConfigManager['validate' + id]
         if(typeof gFn === 'function'){
+            // Validate data, if applicable.
+            if(typeof vFn === 'function' && !vFn(gFn())){
+                // Data is not valid, reset it to default.
+                const sFn = ConfigManager['set' + id]
+                sFn(gFn(true))
+                shouldSave = true
+            }
             settingsState[id] = gFn()
             if(eles[i].tagName === 'SPAN'){
                 eles[i].innerHTML = gFn()
@@ -325,6 +349,9 @@ function bindSettingInputs(){
         } else {
             console.error('Malformed settings input:', id)
         }
+    }
+    if(shouldSave){
+        ConfigManager.save()
     }
 }
 
@@ -383,7 +410,11 @@ function saveSettings(){
         const sFn = ConfigManager['set' + id]
         if(typeof sFn === 'function'){
             if(eles[i].tagName === 'SPAN'){
-                sFn(eles[i].innerHTML)
+                if(eles[i].classList.contains('settingsNumberField')){
+                    sFn(parseInt(eles[i].innerHTML))
+                } else {
+                    sFn(eles[i].innerHTML)
+                }
             } else if(eles[i].tagName === 'INPUT'){
                 if(eles[i].getAttribute('type') === 'checkbox'){
                     sFn(eles[i].checked)
@@ -422,12 +453,21 @@ function retryEnabled(v) {
 }
 
 /**
- * Enable/Disable the settings save button.
+ * Enable/Disable the settings undo button.
  * 
- * @param {boolean} v - If true, the settings save button is clickable, otherwise it isnt. 
+ * @param {boolean} v - If true, the settings undo button is clickable, otherwise it isnt. 
  */
-function settingsSaveEnabled(v) {
-    settingsSaveButton.disabled = !v
+function settingsUndoEnabled(v) {
+    settingsUndoButton.disabled = !v
+}
+
+/**
+ * Enable/Disable the settings done button.
+ * 
+ * @param {boolean} v - If true, the settings done button is clickable, otherwise it isnt. 
+ */
+function settingsDoneEnabled(v) {
+    settingsDoneButton.disabled = !v
 }
 
 /**

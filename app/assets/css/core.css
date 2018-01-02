@@ -60,22 +60,26 @@ body {
     -webkit-user-select: none;
 }
 
+/* Undraggable region on the top of the frame. */
 #frameResizableTop {
     height: 2px;
     width: 100%;
     -webkit-app-region: no-drag;
 }
 
-.frameResizableVert {
-    width: 2px;
-    -webkit-app-region: no-drag;
-}
-
+/* Flexbox to wrap the main frame content. */
 #frameMain {
     display: flex;
     height: 28px
 }
 
+/* Undraggable region on the left and right of the frame. */
+.frameResizableVert {
+    width: 2px;
+    -webkit-app-region: no-drag;
+}
+
+/* Main frame content. */
 #frameContent {
     display: flex;
     justify-content: space-between;
@@ -436,6 +440,7 @@ body {
     transition: 0.25s;
 }
 
+/* Invalid setting class. */
 .invalidSetting {
     background: rgba(255, 17, 17, 0.34) !important;
 }
@@ -486,6 +491,7 @@ body {
     line-height: 11px;
 }
 
+/* Container for baseline settings view elements. */
 #settingsBottom {
     display: flex;
     justify-content: space-between;
@@ -493,10 +499,10 @@ body {
     margin-top: 10px
 }
 
+/* Settings status bar and text. */
 #settingsStatus {
     display: flex;
 }
-
 #settingsStatus > span {
     color: white;
     line-height: 10px;
@@ -520,35 +526,41 @@ body {
     cursor: pointer;
 }
 
-/* Settings save button styles. */
-#settingsSaveButton {
+/* Settings done button styles. */
+#settingsDoneButton {
     margin-left: 10px;
     background: linear-gradient(to top left, rgba(39, 71, 93, 0.75), rgba(0, 94, 160, 0.69));
     box-shadow: inset 0px 9px 12px 0px rgba(95, 154, 243, 0.23)
 }
-#settingsSaveButton:hover {
+#settingsDoneButton:hover {
     box-shadow: inset 0px 9px 40px 0px rgba(95, 154, 243, 0.23)
 }
-#settingsSaveButton:active {
+#settingsDoneButton:active {
     box-shadow: inset 0px 9px 40px 0px rgba(0, 0, 0, 0.23);
 }
-#settingsSaveButton:disabled {
+#settingsDoneButton:disabled {
     pointer-events: none;
     color: #676767;
     background: linear-gradient(to top left, rgba(17, 31, 41, 0.75), rgba(0, 36, 62, 0.69));
     box-shadow: inset 0px 9px 12px 0px rgba(42, 70, 111, 0.23);
 }
 
-/* Settings cancel button styles. */
-#settingsCancelButton {
+/* Settings undo button styles. */
+#settingsUndoButton {
     background: linear-gradient(to top left, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.69));
     box-shadow: inset 0px 9px 12px 0px rgba(255, 255, 255, 0.23)
 }
-#settingsCancelButton:hover {
+#settingsUndoButton:hover {
     box-shadow: inset 0px 9px 40px 0px rgba(255, 255, 255, 0.23);
 }
-#settingsCancelButton:active {
+#settingsUndoButton:active {
     box-shadow: inset 0px 9px 40px 0px rgba(0, 0, 0, 0.23);
+}
+#settingsUndoButton:disabled {
+    pointer-events: none;
+    color: #676767;
+    background: linear-gradient(to top left, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.69));
+    box-shadow: inset 0px 9px 12px 0px rgba(88, 88, 88, 0.23)
 }
 
 /* Toggle Switch. */
@@ -563,7 +575,7 @@ body {
   
 /* Hide default HTML checkbox. */
 .switch input {
-    display:none;
+    display: none;
 }
 
 .slider {
@@ -576,7 +588,6 @@ body {
     background-color: #ccc;
     transition: .4s;
 }
-
 .slider:before {
     position: absolute;
     content: "";
@@ -591,11 +602,9 @@ body {
 input:checked + .slider {
     background-color: rgb(32, 91, 143);
 }
-  
 input:focus + .slider {
     box-shadow: 0 0 1px rgb(32, 91, 143);
 }
-  
 input:checked + .slider:before {
     transform: translateX(15px);
 }

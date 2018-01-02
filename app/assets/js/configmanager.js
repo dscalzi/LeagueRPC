@@ -34,8 +34,38 @@ exports.load = function(){
         config = DEFAULT_CONFIG
         exports.save()
     } else {
-        config = JSON.parse(fs.readFileSync(filePath, 'UTF-8'))
+        try {
+            config = JSON.parse(fs.readFileSync(filePath, 'UTF-8'))
+        } catch(err){
+            console.error('Error while loading settings. Values will be reset.', err)
+            try{
+                logCorruptConfig(filePath)
+            } catch(ex){
+                console.error('Could not log old config.', ex)
+            }
+            config = DEFAULT_CONFIG
+            exports.save()
+        }
     }
+}
+
+/**
+ * Log a corrupted config file.
+ * 
+ * @param {string} fp - the path to the corrupted config file.
+ */
+function logCorruptConfig(fp){
+    const dir = path.join(CacheManager.getDataPath(), 'corrupt')
+    if(!fs.existsSync(dir)){
+        fs.mkdirSync(dir)
+    }
+    let dtv = (new Date()).toISOString().replace(/:/g, '')
+    //dtv = dtv.substring(0, dtv.lastIndexOf('.')) + 'Z'
+    const filePath = path.join(dir, 'config_' + dtv + '.json')
+
+    console.log('Saving corrupt config to ', filePath)
+
+    fs.writeFileSync(filePath, fs.readFileSync(fp, 'UTF-8'), 'UTF-8')
 }
 
 // User Configurable Settings
@@ -62,6 +92,15 @@ exports.setDetectionRefreshRate = function(rate){
 }
 
 /**
+ * Validate a value for the detection refresh rate.
+ * 
+ * @param {any} value - a value to validate.
+ */
+exports.validateDetectionRefreshRate = function(value){
+    return typeof value === 'number' && value % 1 === 0 && value >= 15 && value <= 3600
+}
+
+/**
  * Retrieve the rate at which the application will check for new data about the game currently
  * in progress on the the user's account. Value is in seconds.
  * 
@@ -80,6 +119,15 @@ exports.getGameRefreshRate = function(def = false){
  */
 exports.setGameRefreshRate = function(rate){
     config.settings.gameRefreshRate = rate
+}
+
+/**
+ * Validate a value for the game refresh rate.
+ * 
+ * @param {any} value - a value to validate.
+ */
+exports.validateGameRefreshRate = function(value){
+    return typeof value === 'number' && value % 1 === 0 && value >= 20 && value <= 300
 }
 
 /**
