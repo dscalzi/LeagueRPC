@@ -11,6 +11,9 @@
     "buildlinux": "node buildtool.js linux x64",
     "buildlinuxarm": "node buildtool.js linux arm64"
   },
+  "engines": {
+    "node": "8.9.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dscalzi/LeagueRPC.git"
