@@ -5,7 +5,7 @@ const request = require('request')
 const TeemoJS = require('teemojs');
 const yaml = require('js-yaml')
 
-const api = TeemoJS('RGAPI-d3c2a70b-e1bb-4a3b-afee-864f944ce29b');
+const api = TeemoJS('RGAPI-b6bd7f24-f879-49e2-aa9b-d66dda4c7502');
 const sysRoot = (os.platform() == "win32") ? process.cwd().split(path.sep)[0] : "/"
 const riotConfig = path.join(sysRoot, 'Riot Games', 'League of Legends', 'Config', 'LeagueClientSettings.yaml')
 const champCache = path.join(__dirname, '..', 'apicache', 'championdata.json')
@@ -21,6 +21,63 @@ const regions = {
     OC1: 'OC1',
     RU: 'RU',
     TR: 'TR1'
+}
+// https://developer.riotgames.com/game-constants.html - gameQueueConfigId
+const queues = {
+    0: 'Custom Game',
+    70: 'One for All', // Summoner's Rift (One for All)
+    72: 'Snowdown Showdown (1v1)', // Howling Abyss (1v1 Snowdown Showdown)
+    73: 'Snowdown Showdown (2v2)', // Howling Abyss (2v2 Snowdown Showdown)
+    75: 'Hexakill', // Summoner's Rift (6v6 Hexakill)
+    76: 'Ultra Rapid Fire', // Summoner's Rift (Ultra Rapid Fire)
+    78: 'Mirrored One for All', // Summoner's Rift (Mirrored One for All)
+    83: 'Ultra Rapid Fire (Co-op vs. AI)', // Summoner's Rift (Co-op vs. AI Ultra Rapid Fire)
+    98: 'Hexakill', // Twisted Treeline (6v6 Hexakill)
+    100: 'ARAM', // Butcher's Bridge (5v5 ARAM)
+    310: 'Nemesis', // Summoner's Rift (Nemesis)
+    313: 'Black Market Brawlers', // Summoner's Rift (Black Market Brawlers)
+    317: 'Definitely Not Dominion', // Crystal Scar (Definitely Not Dominion)
+    325: 'All Random', // Summoner's Rift (All Random)
+    400: 'Draft Pick (Normal)', // Summoner's Rift (5v5 Draft Pick)
+    420: 'Ranked Solo/Duo', // Summoner's Rift (5v5 Ranked Solo/Duo)
+    430: 'Blind Pick (Normal)', // Summoner's Rift (5v5 Blind Pick)
+    440: 'Ranked Flex', // Summoner's Rift (5v5 Ranked Flex)
+    450: 'ARAM', // Howling Abyss (5v5 ARAM)
+    460: 'Blind Pick (Normal)', // Twisted Treeline (3v3 Blind Pick)
+    470: 'Ranked Flex', // Twisted Treeline (3v3 Ranked Flex)
+    600: 'Hunt of the Blood Moon', // Summoner's Rift (Blood Hunt Assasin)
+    610: 'Dark Star: Singularity', // Cosmic Ruins (Dark Star: Singularity)
+    800: 'Co-op vs. AI (Intermediate)', // Twisted Treeline (Co-op vs. AI Intermediate)
+    810: 'Co-op vs. AI (Intro)', // Twisted Treeline (Co-op vs. AI Intro)
+    820: 'Co-op vs. AI (Beginner)', // Twisted Treeline (Co-op vs. AI Beginner)
+    830: 'Co-op vs. AI (Intro)', // Summoner's Rift (Co-op vs. AI Intro)
+    840: 'Co-op vs. AI (Beginner)', // Summoner's Rift (Co-op vs. AI Beginner)
+    850: 'Co-op vs. AI (Intermediate)', // Summoner's Rift (Co-op vs. AI Intermediate)
+    900: 'ARURF', // Summoner's Rift (ARURF)
+    910: 'Ascension', // Crystal Scar (Ascension)
+    920: 'Legend of the Poro King', // Howling Abyss (Legend of the Poro King)
+    940: 'Nexus Siege', // Summoner's Rift (Nexus Siege)
+    950: 'Doom Bots Voting', // Summoner's Rift (Doom Bots Voting)
+    960: 'Doom Bots Standard', // Summoner's Rift (Doom Bots Standard)
+    980: 'Invasion: Normal', // Valoran City Park (Star Guardian Invasion: Normal)
+    990: 'Invasion: Onslaught', // Valoran City Park (Star Guardian Invasion: Onslaught)
+    1000: 'Overcharge', // Overcharge (PROJECT: Hunters)
+    1010: 'Snow ARURF' // Summoner's Rift (Snow ARURF)
+}
+
+const maps = {
+    1: 'Summoner\'s Rift',
+    2: 'Summoner\'s Rift',
+    3: 'The Proving Grounds',
+    4: 'Twisted Treeline',
+    8: 'The Crystal Scar',
+    10: 'Twisted Treeline',
+    11: 'Summoner\'s Rift',
+    12: 'Howling Abyss',
+    14: 'Butcher\'s Bridge',
+    16: 'Cosmic Ruins',
+    18: 'Valoran City Park',
+    19: 'Substructure 43'
 }
 
 class RiotWrapper {
@@ -127,7 +184,18 @@ class RiotWrapper {
         return 'http://ddragon.leagueoflegends.com/cdn/' + this.ddragonVersion + '/img/profileicon/' + this.accountData.profileIconId + '.png'
     }
 
-    
+    async getCurrentGameInfo(){
+        const cGame = await api.get(this.savedAccount.region, 'getCurrentGameInfoBySummoner', this.accountData.id)
+        cGame.discordQueueType = cGame.gameType === 'TUTORIAL_GAME' ? 'Tutorial' : queues[cGame.gameQueueConfigId]
+        cGame.discordMapName = maps[cGame.mapId]
+        if(cGame.discordQueueType == null){
+            cGame.discordQueueType = cGame.gameMode
+        }
+        if(cGames.discordMapName == null){
+            cGame.discordMapName = 'Unknown Map'
+        }
+        return cGame
+    }
 
 }
 

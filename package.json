@@ -5,7 +5,11 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "npm start test.js"
+    "test": "npm start test.js",
+    "buildwin": "node buildtool.js win32 x64",
+    "builddarwin": "node buildtool.js darwin x64",
+    "buildlinux": "node buildtool.js linux x64",
+    "buildlinuxarm": "node buildtool.js linux arm64"
   },
   "repository": {
     "type": "git",
@@ -26,7 +30,10 @@
   },
   "homepage": "https://github.com/dscalzi/LeagueRPC#readme",
   "devDependencies": {
-    "electron": "^1.7.9"
+    "electron": "^1.7.10",
+    "electron-installer-dmg": "^0.2.1",
+    "electron-packager": "^10.1.1",
+    "electron-winstaller": "^2.6.3"
   },
   "dependencies": {
     "discord-rpc": "^3.0.0-beta.8",

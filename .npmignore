@@ -60,5 +60,8 @@ typings/
 # Visual Studio Code
 .vscode
 
+# Builds
+builds
+
 # Discord Rich Presence Assets
 discord_assets
