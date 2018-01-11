@@ -1,6 +1,7 @@
 const path = require('path')
 const CacheManager = require(path.join(__dirname, 'assets', 'js', 'cachemanager.js'))
 const ConfigManager = require(path.join(__dirname, 'assets', 'js', 'configmanager.js'))
+const MatchManager = require(path.join(__dirname, 'assets', 'js', 'matchmanager.js'))
 const ProcessManager = require(path.join(__dirname, 'assets', 'js', 'processmanager.js'))
 const RiotWrapper = require(path.join(__dirname, 'assets', 'js', 'riotwrapper.js'))
 
@@ -13,6 +14,9 @@ const riot = new RiotWrapper()
 
 // Load View Elements.
 let retryBtn, loadSpinner, loadText, loadDetails, loadDock
+
+// Main View Elements.
+let enableButton, disableButton, statusValue, refreshCounter
 
 // Settings View Elements.
 let settingsButton, summonerDock, settingsUndoButton, settingsDoneButton, settingStatusText
@@ -31,6 +35,12 @@ document.addEventListener('readystatechange', function () {
         loadText = document.getElementById('loadText')
         loadDetails = document.getElementById('loadDetails')
         loadDock = document.getElementById('loadDock')
+
+        // Reference the Main View Elements.
+        enableButton = document.getElementById('enableButton')
+        disableButton = document.getElementById('disableButton')
+        statusValue = document.getElementById('statusValue')
+        refreshCounter = document.getElementById('refreshCounter')
 
         // Reference the Settings View Elements.
         settingsButton = document.getElementById('settingsButton')
@@ -71,6 +81,17 @@ document.addEventListener('readystatechange', function () {
                 }
                 e.preventDefault()
             }
+        })
+
+        // Initialize Match Manager
+        MatchManager.init(riot)
+
+        // Bind the enable/disable buttons.
+        enableButton.addEventListener('click', () => {
+            toggleAppEnabled(true)
+        })
+        disableButton.addEventListener('click', () => {
+            toggleAppEnabled(false)
         })
 
         // Bind the settings button on the main view.
@@ -263,6 +284,59 @@ async function prepareMainUI(){
         });
     }, 2000)
 
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Main View Processing                                                        *
+ *                                                                             *
+ ******************************************************************************/
+
+let observer = null
+let refreshTask = null
+let refreshTime = 0
+
+function toggleAppEnabled(v){
+    // v = true, enabled, false = disabled
+    if(v){
+        $('#enableButton').fadeOut(250, () => {
+        })
+        setTimeout(() => {
+            disableButton.style.display = ''
+            statusValue.innerHTML = 'Enabled'
+            observer = MatchManager.getObserver()
+            observer.on('check', () => {
+                clearInterval(refreshTask)
+                refreshTask = null
+                refreshTime = 0
+                refreshCounter.innerHTML = 'Refreshing..'
+            })
+            observer.on('tick', (t) => {
+                clearInterval(refreshTask)
+                refreshTask = null
+                refreshTime = t
+                decrementRefreshCounter()
+                refreshTask = setInterval(() => decrementRefreshCounter(), 1000)
+            })
+            MatchManager.start()
+        }, 250)
+        //enableButton.style.display = 'none'
+        //disableButton.style.display = ''
+        
+    } else {
+        MatchManager.stop()
+        clearInterval(refreshTask)
+        refreshTask = null
+        refreshCounter.innerHTML = 'Click below to enable!'
+        enableButton.style.display = ''
+        disableButton.style.display = 'none'
+        statusValue.innerHTML = 'Disabled'
+    }
+}
+
+function decrementRefreshCounter(){
+    refreshCounter.innerHTML = 'Refreshing in ' + refreshTime + ' seconds..'
+    refreshTime -= 1
 }
 
 /*******************************************************************************

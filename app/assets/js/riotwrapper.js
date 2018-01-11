@@ -5,7 +5,7 @@ const request = require('request')
 const TeemoJS = require('teemojs');
 const yaml = require('js-yaml')
 
-const api = TeemoJS('RGAPI-b6bd7f24-f879-49e2-aa9b-d66dda4c7502');
+const api = TeemoJS('RGAPI-a55a7b70-aae5-487c-918e-6aed82b223aa');
 const sysRoot = (os.platform() == "win32") ? process.cwd().split(path.sep)[0] : "/"
 const riotConfig = path.join(sysRoot, 'Riot Games', 'League of Legends', 'Config', 'LeagueClientSettings.yaml')
 const champCache = path.join(__dirname, '..', 'apicache', 'championdata.json')
@@ -123,6 +123,17 @@ class RiotWrapper {
         }
     }
 
+    isInProgress(){
+        try {
+            const conf = yaml.safeLoad(fs.readFileSync(riotConfig, 'utf8'))
+            // conf.install['gameflow-process-info'].pid is available
+            return conf.install['gameflow-process-info'] != null
+        } catch(err) {
+            console.log('Unexpected error while retrieving saved data:', err)
+            return false
+        }
+    }
+
     async getAccountData(cached = true){
         if(this.savedAccount == null){
             this.getSavedAccount()
@@ -185,16 +196,36 @@ class RiotWrapper {
     }
 
     async getCurrentGameInfo(){
-        const cGame = await api.get(this.savedAccount.region, 'getCurrentGameInfoBySummoner', this.accountData.id)
-        cGame.discordQueueType = cGame.gameType === 'TUTORIAL_GAME' ? 'Tutorial' : queues[cGame.gameQueueConfigId]
-        cGame.discordMapName = maps[cGame.mapId]
-        if(cGame.discordQueueType == null){
-            cGame.discordQueueType = cGame.gameMode
+        const cGame = await api.get(this.savedAccount.region, 'spectator.getCurrentGameInfoBySummoner', this.accountData.id.toString())
+        if(cGame == null){
+            return null
         }
-        if(cGames.discordMapName == null){
-            cGame.discordMapName = 'Unknown Map'
+        console.log(cGame)
+        const ret = {
+            queueType: cGame.gameType === 'TUTORIAL_GAME' ? 'Tutorial' : (cGame.gameType === 'CUSTOM_GAME' ? 'Custom Game' : queues[cGame.gameQueueConfigId]),
+            mapName: maps[cGame.mapId],
+            startTime: cGame.gameStartTime,
+            spectateKey: cGame.observers.encryptionKey,
+            gameId: cGame.gameId
         }
-        return cGame
+        if(ret.queueType == null){
+            ret.queueType = cGame.gameMode
+        }
+        if(ret.mapName == null){
+            ret.mapName = 'Unknown Map'
+        }
+        for(let i=0; i<cGame.participants.length; i++){
+            const p = cGame.participants[i]
+            if(p.summonerName === this.accountData.name){
+                const x = JSON.parse(fs.readFileSync(champCache, 'utf8'))
+                ret.champion = {
+                    id: p.championId,
+                    name: x.data[p.championId].name
+                }
+                break
+            }
+        }
+        return ret
     }
 
 }
