@@ -305,26 +305,26 @@ function toggleAppEnabled(v){
             disableButton.style.display = ''
             statusValue.innerHTML = 'Enabled'
             observer = MatchManager.getObserver()
-            observer.on('check', () => {
+            observer.on(MatchManager.EVENTS.TASK_RUN, () => {
                 clearInterval(refreshTask)
                 refreshTask = null
                 refreshTime = 0
                 refreshCounter.innerHTML = 'Refreshing..'
             })
-            observer.on('tick', (t) => {
+            observer.on(MatchManager.EVENTS.TIMER_RESET, (t) => {
                 clearInterval(refreshTask)
                 refreshTask = null
                 refreshTime = t
                 decrementRefreshCounter()
                 refreshTask = setInterval(() => decrementRefreshCounter(), 1000)
             })
-            MatchManager.start()
+            MatchManager.enable()
         }, 250)
         //enableButton.style.display = 'none'
         //disableButton.style.display = ''
         
     } else {
-        MatchManager.stop()
+        MatchManager.disable()
         clearInterval(refreshTask)
         refreshTask = null
         refreshCounter.innerHTML = 'Click below to enable!'

@@ -5,7 +5,7 @@ let activity
 
 exports.initRPC = function(queueType, mapName, champion, startTime){
     rpc = new Client({ transport: 'ipc' })
-    
+
     rpc.on('ready', () => {
         activity = {
             details: queueType,
@@ -38,11 +38,11 @@ exports.updateDetails = function(details){
     rpc.setActivity(activity)
 }
 
-exports.updateStartTime = function(time){
+exports.updateStartTime = function(startTime){
     if(activity == null){
         console.error('Discord RPC is not initialized and therefore cannot be updated.')
     }
-    activity.startTime = time
+    activity.startTimestamp = parseInt(startTime / 1000)
     rpc.setActivity(activity)
 }
 
