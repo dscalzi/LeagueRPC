@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const sysRoot = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + 'Library/Preferences' : '/var/local')
+const sysRoot = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : '/var/local')
 const dataPath = path.join(sysRoot, 'LeagueRPC')
 
 function ensureDirectoryExists(){

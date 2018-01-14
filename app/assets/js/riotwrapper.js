@@ -6,8 +6,8 @@ const TeemoJS = require('teemojs');
 const yaml = require('js-yaml')
 
 const api = TeemoJS('RGAPI-9319b382-2893-4e6f-b115-ff21e70b11d3')
-const sysRoot = (os.platform() == "win32") ? process.cwd().split(path.sep)[0] : "/"
-const riotConfig = path.join(sysRoot, 'Riot Games', 'League of Legends', 'Config', 'LeagueClientSettings.yaml')
+const sysRoot = (os.platform() == "win32") ? process.cwd().split(path.sep)[0] : ( os.platform() == 'darwin' ? path.join('/', 'Applications') : '/')
+const riotConfig = process.platform == 'win32' ? path.join(sysRoot, 'Riot Games', 'League of Legends', 'Config', 'LeagueClientSettings.yaml') : (process.platform == 'darwin' ? path.join(sysRoot, 'League of Legends.app', 'Contents', 'LoL', 'Config', 'LeagueClientSettings.yaml') : sysRoot)
 const champCache = path.join(__dirname, '..', 'apicache', 'championdata.json')
 const regions = {
     BR: 'BR1',
