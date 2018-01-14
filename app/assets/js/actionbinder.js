@@ -16,7 +16,7 @@ const riot = new RiotWrapper()
 let retryBtn, loadSpinner, loadText, loadDetails, loadDock
 
 // Main View Elements.
-let enableButton, disableButton, statusValue, refreshCounter
+let enableButton, disableButton, refreshCounter
 
 // Settings View Elements.
 let settingsButton, summonerDock, settingsUndoButton, settingsDoneButton, settingStatusText
@@ -39,7 +39,6 @@ document.addEventListener('readystatechange', function () {
         // Reference the Main View Elements.
         enableButton = document.getElementById('enableButton')
         disableButton = document.getElementById('disableButton')
-        statusValue = document.getElementById('statusValue')
         refreshCounter = document.getElementById('refreshCounter')
 
         // Reference the Settings View Elements.
@@ -271,18 +270,22 @@ async function prepareMainUI(){
 
     document.getElementById('summonerName').innerHTML = (await riot.getAccountData()).name
     document.getElementById('summonerIcon').src = await riot.getSummonerIcon()
-    document.body.style.background = 'url(' + await riot.getRandomChampionSkinURL(await riot.getRecentChampId()) + ') no-repeat center center fixed'
-    document.body.style.backgroundSize = 'cover'
+    const bkURL = await riot.getRandomChampionSkinURL(await riot.getRecentChampId())
 
-    // TODO -> download img to temp folder and once dl is done show main content.
-    setTimeout(() => {
-        // Use jQuery to fade in the content.
-        $('#loadContent').fadeOut(250, () => {
-            $('#mainContent').fadeIn(250, () => {
-
+    const img = new Image()
+    img.onload = () => {
+        document.body.style.background = 'url(' + bkURL + ') no-repeat center center fixed'
+        document.body.style.backgroundSize = 'cover'
+        setTimeout(() => {
+            // Use jQuery to fade in the content.
+            $('#loadContent').fadeOut(250, () => {
+                $('#mainContent').fadeIn(250, () => {
+    
+                });
             });
-        });
-    }, 2000)
+        }, 1000)
+    }
+    img.src = bkURL
 
 }
 
@@ -303,7 +306,6 @@ function toggleAppEnabled(v){
         })
         setTimeout(() => {
             disableButton.style.display = ''
-            statusValue.innerHTML = 'Enabled'
             observer = MatchManager.getObserver()
             observer.on(MatchManager.EVENTS.TASK_RUN, () => {
                 clearInterval(refreshTask)
@@ -330,7 +332,6 @@ function toggleAppEnabled(v){
         refreshCounter.innerHTML = 'Click below to enable!'
         enableButton.style.display = ''
         disableButton.style.display = 'none'
-        statusValue.innerHTML = 'Disabled'
     }
 }
 
