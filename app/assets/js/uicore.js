@@ -48,7 +48,7 @@ $(document).on('click', 'a[href^="http"]', function(event) {
 })
 
 /**
- * Opens DevTools window if you type "wcdev" in sequence.
+ * Opens DevTools window if you hold (ctrl + shift + i).
  * This will crash the program if you are using multiple
  * DevTools, for example the chrome debugger in VS Code. 
  */
