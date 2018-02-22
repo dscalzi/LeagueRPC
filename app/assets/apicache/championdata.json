@@ -984,6 +984,11 @@
                     "id": 19009,
                     "name": "Urfwick",
                     "num": 9
+                },
+                {
+                    "id": 19010,
+                    "name": "Lunar Guardian Warwick",
+                    "num": 10
                 }
             ]
         },
@@ -2317,7 +2322,7 @@
             "id": 50,
             "key": "Swain",
             "name": "Swain",
-            "title": "the Master Tactician",
+            "title": "the Noxian Grand General",
             "skins": [
                 {
                     "id": 50000,
@@ -2338,6 +2343,11 @@
                     "id": 50003,
                     "name": "Tyrant Swain",
                     "num": 3
+                },
+                {
+                    "id": 50004,
+                    "name": "Dragon Master Swain",
+                    "num": 4
                 }
             ]
         },
@@ -2757,6 +2767,11 @@
                     "id": 59006,
                     "name": "Fnatic Jarvan IV",
                     "num": 6
+                },
+                {
+                    "id": 59007,
+                    "name": "Dark Star Jarvan IV",
+                    "num": 7
                 }
             ]
         },
@@ -3215,6 +3230,11 @@
                     "id": 75010,
                     "name": "Worldbreaker Nasus",
                     "num": 10
+                },
+                {
+                    "id": 75011,
+                    "name": "Lunar Guardian Nasus",
+                    "num": 11
                 }
             ]
         },
@@ -3417,6 +3437,11 @@
                     "id": 79009,
                     "name": "Gragas Caskbreaker",
                     "num": 9
+                },
+                {
+                    "id": 79010,
+                    "name": "Arctic Ops Gragas",
+                    "num": 10
                 }
             ]
         },
@@ -4084,6 +4109,11 @@
                     "id": 99007,
                     "name": "Elementalist Lux",
                     "num": 7
+                },
+                {
+                    "id": 99008,
+                    "name": "Lunar Empress Lux",
+                    "num": 8
                 }
             ]
         },
@@ -5853,6 +5883,11 @@
                     "id": 497001,
                     "name": "Cosmic Dawn Rakan",
                     "num": 1
+                },
+                {
+                    "id": 497002,
+                    "name": "Sweetheart Rakan",
+                    "num": 2
                 }
             ]
         },
@@ -5871,6 +5906,11 @@
                     "id": 498001,
                     "name": "Cosmic Dusk Xayah",
                     "num": 1
+                },
+                {
+                    "id": 498002,
+                    "name": "Sweetheart Xayah",
+                    "num": 2
                 }
             ]
         },
@@ -5894,5 +5934,5 @@
         }
     },
     "type": "champion",
-    "version": "8.1.1"
+    "version": "8.4.1"
 }
