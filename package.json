@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/dscalzi/LeagueRPC#readme",
   "devDependencies": {
-    "electron": "^1.8.2",
+    "electron": "^1.8.3",
     "electron-installer-dmg": "^0.2.1",
     "electron-packager": "^11.0.1",
     "electron-winstaller": "^2.6.4"

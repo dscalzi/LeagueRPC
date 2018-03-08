@@ -5138,6 +5138,24 @@
                 }
             ]
         },
+        "145": {
+            "id": 145,
+            "key": "Kaisa",
+            "name": "Kai'Sa",
+            "title": "Daughter of the Void",
+            "skins": [
+                {
+                    "id": 145000,
+                    "name": "default",
+                    "num": 0
+                },
+                {
+                    "id": 145001,
+                    "name": "Bullet Angel Kai'Sa",
+                    "num": 1
+                }
+            ]
+        },
         "150": {
             "id": 150,
             "key": "Gnar",
@@ -5768,6 +5786,11 @@
                     "id": 420001,
                     "name": "Void Bringer Illaoi",
                     "num": 1
+                },
+                {
+                    "id": 420002,
+                    "name": "Resistance Illaoi",
+                    "num": 2
                 }
             ]
         },
@@ -5934,5 +5957,5 @@
         }
     },
     "type": "champion",
-    "version": "8.4.1"
+    "version": "8.5.2"
 }
