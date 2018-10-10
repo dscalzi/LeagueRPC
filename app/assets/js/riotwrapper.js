@@ -5,7 +5,7 @@ const request = require('request')
 const TeemoJS = require('teemojs');
 const yaml = require('js-yaml')
 
-const api = TeemoJS('RGAPI-9319b382-2893-4e6f-b115-ff21e70b11d3')
+const api = TeemoJS('RGAPI-0c1a92ec-168d-4c5a-b69b-d634541b2923')
 const sysRoot = (os.platform() == "win32") ? process.cwd().split(path.sep)[0] : ( os.platform() == 'darwin' ? path.join('/', 'Applications') : '/')
 const riotConfig = process.platform == 'win32' ? path.join(sysRoot, 'Riot Games', 'League of Legends', 'Config', 'LeagueClientSettings.yaml') : (process.platform == 'darwin' ? path.join(sysRoot, 'League of Legends.app', 'Contents', 'LoL', 'Config', 'LeagueClientSettings.yaml') : sysRoot)
 const champCache = path.join(__dirname, '..', 'apicache', 'championdata.json')
@@ -150,8 +150,9 @@ class RiotWrapper {
 
     async getRecentChampId(cached = true){
         if(this.recentChamp == null || !cached){
-            const matchData = await api.get(this.savedAccount.region, 'match.getRecentMatchlist', this.savedAccount.accountId)
+            const matchData = await api.get(this.savedAccount.region, 'match.getMatchlist', this.savedAccount.accountId)
             const mArr = matchData.matches
+            console.log(matchData)
             const freq = {top: null}
             for(let i=0; i<mArr.length; i++){
                 if(i == 0){

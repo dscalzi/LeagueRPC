@@ -1,4 +1,4 @@
-const {Client} = require('discord-rpc')
+const { Client } = require('discord-rpc')
 
 let rpc
 let activity
@@ -21,7 +21,7 @@ exports.initRPC = function(queueType, mapName, champion, startTime){
         rpc.setActivity(activity)
     })
 
-    rpc.login('394534740902019094').catch(error => {
+    rpc.login({clientId: '394534740902019094'}).catch(error => {
         if(error.message.includes('ENOENT')) {
             console.log('Unable to initialize Discord Rich Presence, no client detected.')
         } else {
@@ -48,7 +48,7 @@ exports.updateStartTime = function(startTime){
 
 exports.shutdownRPC = function(){
     if(!rpc) return
-    rpc.setActivity({})
+    rpc.clearActivity()
     rpc.destroy()
     rpc = null
     activity = null

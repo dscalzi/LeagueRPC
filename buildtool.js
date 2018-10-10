@@ -26,45 +26,42 @@ packager({
     prune: true,
     platform: p,
     arch: a
-}, (err, appPaths) => {
+}).then(appPaths => {
     console.log(`Packaged ${p}-${a}`)
-    if(err){
-        console.log(err)
-        return
-    } else {
-        if(p === 'win32'){
-            // TODO Complete options (signature, etc)
-            console.log(`Building ${p}-${a} installer..`)
-            electronInstaller.createWindowsInstaller({
-                appDirectory: appPaths[0],
-                outputDirectory: path.join(buildPath, `${appName}-${p}-${a}-msi`),
-                authors: 'Daniel Scalzi',
-                exe: `${appName}.exe`,
-                setupIcon: iconPath,
-                setupExe: `${appName}.exe`,
-                setupMsi: `${appName}.msi`
-            }).then(() => {
+    if(p === 'win32'){
+        // TODO Complete options (signature, etc)
+        console.log(`Building ${p}-${a} installer..`)
+        electronInstaller.createWindowsInstaller({
+            appDirectory: appPaths[0],
+            outputDirectory: path.join(buildPath, `${appName}-${p}-${a}-msi`),
+            authors: 'Daniel Scalzi',
+            exe: `${appName}.exe`,
+            setupIcon: iconPath,
+            setupExe: `${appName}.exe`,
+            setupMsi: `${appName}.msi`
+        }).then(() => {
+            console.log(`${p}-${a} installer successfully built.`)
+        }, (e) => {
+            console.log('Error while building installer:', e.message)
+        })
+    } else if(p === 'darwin'){
+        // TODO Test on macOS
+        console.log(`Building ${p}-${a} installer..`)
+        createDMG({
+            appPath: path.join(appPaths[0], `${appName}.app`),
+            name: appName,
+            icon: iconPathMac,
+            overwrite: true,
+            debug: true,
+            out: path.join(buildPath, `${appName}-${p}-${a}-dmg`)
+        }, (err) => {
+            if(err){
+                console.log('Error while building installer:', err.message)
+            } else {
                 console.log(`${p}-${a} installer successfully built.`)
-            }, (e) => {
-                console.log('Error while building installer:', e.message)
-            })
-        } else if(p === 'darwin'){
-            // TODO Test on macOS
-            console.log(`Building ${p}-${a} installer..`)
-            createDMG({
-                appPath: path.join(appPaths[0], `${appName}.app`),
-                name: appName,
-                icon: iconPathMac,
-                overwrite: true,
-                debug: true,
-                out: path.join(buildPath, `${appName}-${p}-${a}-dmg`)
-            }, (err) => {
-                if(err){
-                    console.log('Error while building installer:', err.message)
-                } else {
-                    console.log(`${p}-${a} installer successfully built.`)
-                }
-            })
-        }
+            }
+        })
     }
+}).catch(err => {
+    console.log(err)
 })

@@ -33,16 +33,16 @@
   },
   "homepage": "https://github.com/dscalzi/LeagueRPC#readme",
   "devDependencies": {
-    "electron": "^1.8.6",
-    "electron-installer-dmg": "^0.2.1",
-    "electron-packager": "^11.0.1",
-    "electron-winstaller": "^2.6.4"
+    "electron": "^3.0.3",
+    "electron-installer-dmg": "^2.0.0",
+    "electron-packager": "^12.2.0",
+    "electron-winstaller": "^2.7.0"
   },
   "dependencies": {
-    "discord-rpc": "=3.0.0-beta.8",
+    "discord-rpc": "^3.0.1",
     "jquery": "^3.3.1",
-    "js-yaml": "^3.11.0",
-    "request": "^2.85.0",
-    "teemojs": "^1.2.0"
+    "js-yaml": "^3.12.0",
+    "request": "^2.88.0",
+    "teemojs": "^1.2.1"
   }
 }
