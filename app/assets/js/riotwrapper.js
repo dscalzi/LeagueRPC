@@ -152,7 +152,6 @@ class RiotWrapper {
         if(this.recentChamp == null || !cached){
             const matchData = await api.get(this.savedAccount.region, 'match.getMatchlist', this.savedAccount.accountId)
             const mArr = matchData.matches
-            console.log(matchData)
             const freq = {top: null}
             for(let i=0; i<mArr.length; i++){
                 if(i == 0){
