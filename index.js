@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const {app, BrowserWindow} = require('electron')
 const path = require('path')
 const url = require('url')
@@ -14,7 +16,9 @@ function createWindow() {
         //icon: getPlatformIcon('WesterosSealSquare'),
         frame: false,
         webPreferences: {
-            preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js')
+            preload: path.join(__dirname, 'app', 'assets', 'js', 'preloader.js'),
+            nodeIntegration: true,
+            contextIsolation: false
         }
     })
 
@@ -27,7 +31,7 @@ function createWindow() {
     win.setMenu(null)
 
     win.setResizable(true)
-
+    win.toggleDevTools()
     win.on('closed', () => {
         win = null
     })

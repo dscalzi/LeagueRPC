@@ -5,7 +5,7 @@ const request = require('request')
 const TeemoJS = require('teemojs');
 const yaml = require('js-yaml')
 
-const api = TeemoJS('RGAPI-0c1a92ec-168d-4c5a-b69b-d634541b2923')
+const api = TeemoJS(process.env.RIOT_DEV_KEY)
 const sysRoot = (os.platform() == "win32") ? process.cwd().split(path.sep)[0] : ( os.platform() == 'darwin' ? path.join('/', 'Applications') : '/')
 const riotConfig = process.platform == 'win32' ? path.join(sysRoot, 'Riot Games', 'League of Legends', 'Config', 'LeagueClientSettings.yaml') : (process.platform == 'darwin' ? path.join(sysRoot, 'League of Legends.app', 'Contents', 'LoL', 'Config', 'LeagueClientSettings.yaml') : sysRoot)
 const champCache = path.join(__dirname, '..', 'apicache', 'championdata.json')
@@ -107,6 +107,13 @@ class RiotWrapper {
         })
     }
 
+    // V4 broke this, we can no longer simply use the account id.
+    // For whatever reason, there is now an "encrypted" account id
+    // which must be used through the API. The account id is still
+    // exposed in the client configuration, so riot's not even
+    // using this in the client. A fix would have to prompt the user
+    // to provide their summoner name in the settings. Seeing as this
+    // project is discontinued, that likely won't happen.
     getSavedAccount(cached = true){
         try {
             if(this.savedAccount == null || !cached){
