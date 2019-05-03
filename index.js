@@ -31,7 +31,7 @@ function createWindow() {
     win.setMenu(null)
 
     win.setResizable(true)
-    win.toggleDevTools()
+
     win.on('closed', () => {
         win = null
     })
