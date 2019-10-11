@@ -176,13 +176,13 @@ function checkDiscordTask(){
  * Check for a valid League of Legends configuration.
  */
 
-function startLeagueCheck(){
+async function startLeagueCheck(){
 
     loadText.innerHTML = 'App Starting'
     loadDetails.innerHTML = 'Retrieving League Account..'
     toggleSpinner(true)
 
-    let acc = riot.getSavedAccount()
+    let acc = await riot.getSavedAccount()
 
 
     if(acc != null){

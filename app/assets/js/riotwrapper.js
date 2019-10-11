@@ -114,13 +114,21 @@ class RiotWrapper {
     // using this in the client. A fix would have to prompt the user
     // to provide their summoner name in the settings. Seeing as this
     // project is discontinued, that likely won't happen.
-    getSavedAccount(cached = true){
+    async getSavedAccount(cached = true){
         try {
             if(this.savedAccount == null || !cached){
-                const conf = yaml.safeLoad(fs.readFileSync(riotConfig, 'utf8'))
-                this.savedAccount = {
-                    accountId: conf.install['game-settings'].accountId,
-                    region: regions[conf.install.globals['region']]
+                if(process.env.SUMMONER_NAME != null && process.env.SUMMONER_REGION != null) {
+                    const accountData = await api.get(process.env.SUMMONER_REGION, 'summoner.getBySummonerName', process.env.SUMMONER_NAME)
+                    this.savedAccount = {
+                        accountId: accountData.accountId,
+                        region: process.env.SUMMONER_REGION
+                    }
+                } else {
+                    const conf = yaml.safeLoad(fs.readFileSync(riotConfig, 'utf8'))
+                    this.savedAccount = {
+                        accountId: conf.install['game-settings'].accountId,
+                        region: regions[conf.install.globals['region']]
+                    }
                 }
             }
             return this.savedAccount
